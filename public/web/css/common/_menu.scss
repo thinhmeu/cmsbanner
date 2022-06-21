@@ -1,0 +1,22 @@
+.showSubmenuMobile:active{
+    & + .dropdown-content{
+        display: block;
+    }
+}
+.animate-left-right{
+    animation: slideleft2right 0.4s;
+}
+@keyframes slideleft2right {
+    from {
+        left: -100%;
+    }
+    to{
+        left: 0;
+    }
+}
+#menuMobile{
+    width: 80%;
+    .modal-content{
+        height: 100vh;
+    }
+}

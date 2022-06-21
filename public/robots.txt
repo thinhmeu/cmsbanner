@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://doithuongthecao.com/sitemap.xml

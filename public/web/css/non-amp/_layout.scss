@@ -1,0 +1,57 @@
+@media only screen and (min-width: 992px) {
+    .font-lg-22 {
+        font-size: 22px;
+    }
+    .font-lg-13 {
+        font-size: 13px;
+    }
+    .font-lg-15 {
+        font-size: 15px;
+    }
+    .border-lg-left {border-left: 1px solid #dee2e6}
+    .dropdown {position: relative}
+    .dropdown-content {
+        position: absolute;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 15%);
+    }
+
+    .nav .nav-item {
+        &:hover, &.active {
+            & > a:before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                opacity: 1;
+                bottom: 0;
+                left: 0;
+                height: 3px;
+                background: map_get($colors, 'blue1');
+            }
+        }
+    }
+
+    .list-post{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .item-post{
+        width: 20%;
+        padding-right: 22px;
+        padding-bottom: 35px;
+    }
+}
+
+.category-tag:hover {
+    background: map_get($colors, 'green2');
+}
+
+.icon-toc:hover {
+    cursor: pointer;
+}
+
+.custom > * {
+    min-width: 20%;
+}

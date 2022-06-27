@@ -79,8 +79,13 @@
                                             <b>Nội dung ảnh banner</b>
                                         </div>
                                         <div class="col-6">
-                                            <span>Image</span>
-                                            <input type="text" class="form-control" name="image" value="{{$oneItem->image ?? ''}}">
+                                            <label>Image</label>
+                                            @if(!empty($oneItem->thumbnail))
+                                                <img style="width: 150px" src="{{$oneItem->thumbnail}}" id="lbl_img" class="img-fluid d-block" onclick="upload_file('chosefile','img')">
+                                            @else
+                                                <img style="width: 150px" src="{{url('admin/images/no-image.jpg')}}" id="lbl_img" class="img-fluid d-block" onclick="upload_file('chosefile','img')">
+                                            @endif
+                                            <input type="hidden" name="image" id="hd_img" value="{{$oneItem->image ?? ''}}" required>
                                         </div>
                                         <div class="col-2">
                                             <span>Alt</span>

@@ -80,8 +80,8 @@
                                         </div>
                                         <div class="col-6">
                                             <label>Image</label>
-                                            @if(!empty($oneItem->thumbnail))
-                                                <img style="width: 150px" src="{{$oneItem->thumbnail}}" id="lbl_img" class="img-fluid d-block" onclick="upload_file('chosefile','img')">
+                                            @if(!empty($oneItem->image))
+                                                <img style="width: 150px" src="{{$oneItem->image}}" id="lbl_img" class="img-fluid d-block" onclick="upload_file('chosefile','img')">
                                             @else
                                                 <img style="width: 150px" src="{{url('admin/images/no-image.jpg')}}" id="lbl_img" class="img-fluid d-block" onclick="upload_file('chosefile','img')">
                                             @endif

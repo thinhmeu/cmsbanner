@@ -56,7 +56,12 @@
                                         </div>
                                         <div class="col-3">
                                             <div>On/Off</div>
-                                            <input type="checkbox" name="status" @if(!empty($oneItem) && $oneItem->status == 1) checked @endif>
+                                            @php
+                                                if (empty($oneItem) || $oneItem->status == 1)
+                                                    $checked = 'checked';
+                                                else $checked = ''
+                                            @endphp
+                                            <input type="checkbox" name="status" {{$checked}}>
                                         </div>
 
                                         <div class="col-12 my-3">

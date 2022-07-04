@@ -13,7 +13,7 @@
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <b>Tiêu đề Banner</b>
-                                                <input name="title" class="form-control" value="{{$oneItem->title ?? ''}}">
+                                                <input name="title" class="form-control" value="{{$oneItem->title ?? ''}}" required>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-6">
@@ -64,15 +64,15 @@
                                         </div>
                                         <div class="col-6">
                                             <span>Link</span>
-                                            <input type="text" class="form-control" name="link" value="{{$oneItem->link ?? ''}}">
+                                            <input type="text" class="form-control" name="link" value="{{$oneItem->link ?? ''}}" required>
                                         </div>
                                         <div class="col-2">
                                             <span>Target</span>
-                                            <input class="form-control" type="text" name="target" value="{{$oneItem->target ?? ''}}">
+                                            <input class="form-control" type="text" name="target" value="{{$oneItem->target ?? '_blank'}}">
                                         </div>
                                         <div class="col-2">
                                             <span>Rel</span>
-                                            <input class="form-control" type="text" name="rel" value="{{$oneItem->rel ?? ''}}">
+                                            <input class="form-control" type="text" name="rel" value="{{$oneItem->rel ?? 'nofollow'}}">
                                         </div>
 
                                         <div class="col-12 my-3">
@@ -80,16 +80,19 @@
                                         </div>
                                         <div class="col-6">
                                             <label>Image</label>
-                                            @if(!empty($oneItem->image))
-                                                <img src="{{$oneItem->image}}" id="lbl_img" class="img-fluid d-block" onclick="upload_file('chosefile','img')">
-                                            @else
-                                                <img style="width: 150px" src="{{url('admin/images/no-image.jpg')}}" id="lbl_img" class="img-fluid d-block" onclick="upload_file('chosefile','img')">
-                                            @endif
-                                            <input type="hidden" name="image" id="hd_img" value="{{$oneItem->image ?? ''}}" required>
+                                            <input class="form-control" type="text" name="image" value="{{$oneItem->image ?? ''}}" required>
                                         </div>
                                         <div class="col-2">
                                             <span>Alt</span>
-                                            <input type="text" class="form-control" name="alt" value="{{$oneItem->alt ?? ''}}">
+                                            <input type="text" class="form-control" name="alt" value="{{$oneItem->alt ?? ''}}" required>
+                                        </div>
+                                        <div class="col-2">
+                                            <span>Width</span>
+                                            <input type="number" min="1" class="form-control" name="width" value="{{$oneItem->width ?? ''}}" required>
+                                        </div>
+                                        <div class="col-2">
+                                            <span>Height</span>
+                                            <input type="number" min="1" class="form-control" name="height" value="{{$oneItem->height ?? ''}}" required>
                                         </div>
                                     </div>
                                 </div>

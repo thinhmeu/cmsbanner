@@ -48,11 +48,11 @@
                                         </div>
                                         <div class="col-3">
                                             <span>Start date</span>
-                                            <input type="datetime-local" class="form-control" name="start_date" value="{!! date('Y-m-d\TH:i', strtotime($oneItem->start_date ?? 'now')) !!}">
+                                            <input type="datetime-local" class="form-control" name="start_date" value="{!! !empty($oneItem->start_date) ? date('Y-m-d\TH:i', strtotime($oneItem->start_date)) : ''!!}">
                                         </div>
                                         <div class="col-3">
                                             <span>End date</span>
-                                            <input type="datetime-local" class="form-control" name="end_date" value="{!! date('Y-m-d\TH:i', strtotime($oneItem->end_date ?? '+7 day')) !!}">
+                                            <input type="datetime-local" class="form-control" name="end_date" value="{!! !empty($oneItem->end_date) ? date('Y-m-d\TH:i', strtotime($oneItem->end_date)) : ''!!}">
                                         </div>
                                         <div class="col-3">
                                             <div>On/Off</div>

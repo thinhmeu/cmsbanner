@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use http\Env\Response;
 use Request;
 use Redirect;
 use App\Models\Banner;
@@ -47,7 +48,7 @@ class BannerController extends Controller
             $post_data['slug'] = toSlug($post_data['title']);
             $post_data['status'] = isset($post_data['status']) ? 1 : 0;
             Banner::updateOrInsert(['id' => $id_banner], $post_data);
-            return Redirect::to('/admin/banner');
+            return Redirect::to('/admin/banner/'.$post_data['id_website'].'/'.$post_data['id_position']);
         }
         return view('admin.banner.banner_update', $data);
     }

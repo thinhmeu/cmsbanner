@@ -29,7 +29,7 @@ class BannerController extends Controller
             ['id_website', '=', $id_website],
             ['id_position', '=', $id_position]
         ];
-        $listItem = Banner::where($condition)->get();
+        $listItem = Banner::where($condition)->orderBy('order', 'ASC')->get();
         $data['listItem'] = $listItem;
         return view('admin.banner.banner_index', $data);
     }

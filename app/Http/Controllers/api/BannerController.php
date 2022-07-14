@@ -17,6 +17,7 @@ WHERE banner_site.`slug` = '$siteName' AND `status` = 1 AND NOW() BETWEEN IFNULL
         foreach ($data as $item){
             $tmp[$item->vitri][] = $item;
         }
+        ksort($tmp);
 
         return response($tmp)->withHeaders([
             'Content-Type' => 'application/json',

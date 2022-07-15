@@ -85,19 +85,19 @@
                                         </div>
                                         <div class="col-6">
                                             <label>Image</label>
-                                            <input class="form-control" type="text" name="image" value="{{$oneItem->image ?? ''}}" required>
+                                            <input class="form-control" type="text" name="image" value="{{$oneItem->image ?? ''}}">
                                         </div>
                                         <div class="col-2">
                                             <span>Alt</span>
-                                            <input type="text" class="form-control" name="alt" value="{{$oneItem->alt ?? ''}}" required>
+                                            <input type="text" class="form-control" name="alt" value="{{$oneItem->alt ?? ''}}">
                                         </div>
                                         <div class="col-2">
                                             <span>Width</span>
-                                            <input type="number" min="1" class="form-control" name="width" value="{{$oneItem->width ?? ''}}" required>
+                                            <input type="number" min="1" class="form-control" name="width" value="{{$oneItem->width ?? ''}}">
                                         </div>
                                         <div class="col-2">
                                             <span>Height</span>
-                                            <input type="number" min="1" class="form-control" name="height" value="{{$oneItem->height ?? ''}}" required>
+                                            <input type="number" min="1" class="form-control" name="height" value="{{$oneItem->height ?? ''}}">
                                         </div>
                                     </div>
                                 </div>

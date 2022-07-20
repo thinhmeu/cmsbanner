@@ -7,6 +7,7 @@ use Request;
 use Redirect;
 use App\Models\Banner;
 use App\Models\Banner_site;
+use Illuminate\Support\Facades\DB;
 
 class BannerController extends Controller
 {
@@ -25,11 +26,13 @@ class BannerController extends Controller
         $id_position = $id_position ?? $allPosition[0]->id;
         $data['id_position'] = $id_position;
 
-        $condition = [
-            ['id_website', '=', $id_website],
-            ['id_position', '=', $id_position]
-        ];
-        $listItem = Banner::where($condition)->orderBy('order', 'ASC')->get();
+        $listItem = DB::select("
+            SELECT id, `order`, title, width, height, (STATUS = 1 AND NOW() BETWEEN IFNULL(start_date, NOW()) AND IFNULL(end_date, NOW())) AS really_status
+            FROM banner
+            WHERE id_website = $id_website
+            AND id_position = $id_position
+            ORDER BY `order` ASC, id ASC
+        ");
         $data['listItem'] = $listItem;
         return view('admin.banner.banner_index', $data);
     }

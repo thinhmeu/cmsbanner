@@ -49,7 +49,13 @@
                                 <tr>
                                     <td>{{$item->id}}</td>
                                     <td>{{$item->order}}</td>
-                                    <td class="text-left">{{$item->title. " $item->width*$item->height"}}</td>
+
+                                    <?php $reallyStatus = [
+                                        '<span class="badge badge-danger">Off</span>',
+                                        '<span class="badge badge-success">On</span>',
+                                        ]
+                                    ?>
+                                    <td class="text-left">{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->really_status]!!}</td>
                                     <td>
                                         <a class="btn btn-info" href="/admin/banner/update/{{$item->id}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg></a>
                                         <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="/admin/banner/delete/{{$item->id}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg></a>

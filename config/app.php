@@ -1,6 +1,6 @@
 <?php
 $domain = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : null;
-$debug = $domain == 'doithuongthecao.com' ? false : true;
+$debug = $domain == 'omegaads.live' ? false : true;
 return [
 
     /*

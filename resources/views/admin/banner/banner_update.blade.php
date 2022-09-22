@@ -22,7 +22,7 @@
                                                 <select name="id_website" class="form-control">
                                                     @if(!empty($allSite))
                                                         @foreach($allSite as $item)
-                                                            <option @if(!empty($oneItem) && $oneItem->id_website == $item->id) selected @endif
+                                                            <option @if((!empty($oneItem) && $oneItem->id_website == $item->id)  || (!empty($id_website) && $id_website == $item->id)) selected @endif
                                                             value="{{$item->id}}">{{$item->title}}</option>
                                                         @endforeach
                                                     @endif
@@ -35,7 +35,7 @@
                                                 <select name="id_position" class="form-control">
                                                 @if(!empty($allPosition))
                                                     @foreach($allPosition as $item)
-                                                        <option @if(!empty($oneItem) && $oneItem->id_position == $item->id) selected @endif
+                                                        <option @if((!empty($oneItem) && $oneItem->id_position == $item->id) || (!empty($id_position) && $id_position == $item->id)) selected @endif
                                                         value="{{$item->id}}">{{$item->title}}</option>
                                                     @endforeach
                                                 @endif

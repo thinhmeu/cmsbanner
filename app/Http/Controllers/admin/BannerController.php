@@ -22,12 +22,36 @@ class BannerController extends Controller
         $id_website = $id_website ?? $allSite[0]->id;
         $data['id_website'] = $id_website;
 
+        foreach ($allSite as $site) {
+            $listPosition = DB::select("
+                SELECT distinct(id_position)
+                FROM banner
+                WHERE id_website = $site->id
+                AND status=1
+                AND NOW() BETWEEN IFNULL(start_date,'1900-01-01') AND IFNULL(end_date,NOW())
+                ORDER BY `order` ASC, id ASC
+            ");
+            $site->count_position = count($listPosition);
+        }
+
         $data['allPosition'] = $allPosition = Banner_site::where('type', '=', 'position')->get();
         $id_position = $id_position ?? $allPosition[0]->id;
         $data['id_position'] = $id_position;
 
+        foreach ($allPosition as $position) {
+            $listBanner = DB::select("
+                SELECT *
+                FROM banner
+                WHERE id_website = $id_website
+                AND id_position = $position->id
+                AND status=1
+                AND NOW() BETWEEN IFNULL(start_date,'1900-01-01') AND IFNULL(end_date,NOW())
+            ");
+            $position->count_banner = count($listBanner);
+        }
+
         $listItem = DB::select("
-            SELECT id, `order`, title, width, height, (STATUS = 1 AND NOW() BETWEEN IFNULL(start_date, NOW()) AND IFNULL(end_date, NOW())) AS really_status
+            SELECT id, `order`, title, image, link, width, height, (STATUS = 1 AND NOW() BETWEEN IFNULL(start_date, NOW()) AND IFNULL(end_date, NOW())) AS really_status
             FROM banner
             WHERE id_website = $id_website
             AND id_position = $id_position
@@ -37,7 +61,7 @@ class BannerController extends Controller
         return view('admin.banner.banner_index', $data);
     }
 
-    public function update($id_banner = 0) {
+    public function update($id_banner = 0, $id_website = '', $id_position = '') {
         $data = [];
         if ($id_banner > 0){
             $data['oneItem'] = $oneItem = Banner::findOrFail($id_banner);
@@ -45,6 +69,9 @@ class BannerController extends Controller
 
         $data['allSite'] = $allSite = Banner_site::where('type', '=', 'website')->get();
         $data['allPosition'] = $allPosition = Banner_site::where('type', '=', 'position')->get();
+
+        $data['id_website'] = $id_website;
+        $data['id_position'] = $id_position;
 
         if (!empty(Request::post())) {
             $post_data = Request::post();

@@ -7,7 +7,7 @@
                     <div class="card-header">
                         Danh sách Banner
                         <div class="card-header-actions pr-1">
-                            <a href="/admin/banner/update"><button class="btn btn-block btn-primary btn-sm mr-3" type="button">Thêm mới</button></a>
+                            <a href="/admin/banner/update/0/{{$id_website}}/{{$id_position}}"><button class="btn btn-block btn-primary btn-sm mr-3" type="button">Thêm mới</button></a>
                         </div>
                     </div>
 
@@ -18,7 +18,7 @@
                                 @if(!empty($allSite))
                                     <select class="form-control" onchange="this.form.action = this.value; this.form.submit()">
                                         @foreach($allSite as $item)
-                                            <option @if($item->id == $id_website) selected @endif value="/admin/banner/{{$item->id}}/{{$id_position}}">{{$item->title}}</option>
+                                            <option @if($item->id == $id_website) selected @endif value="/admin/banner/{{$item->id}}/{{$id_position}}">{{$item->title}} ({{$item->count_position}} vị trí có banner)</option>
                                         @endforeach
                                     </select>
                                 @endif
@@ -28,7 +28,7 @@
                                 @if(!empty($allPosition))
                                     <select class="form-control" onchange="this.form.action = this.value; this.form.submit()">
                                         @foreach($allPosition as $item)
-                                            <option @if($item->id == $id_position) selected @endif value="/admin/banner/{{$id_website}}/{{$item->id}}">{{$item->title}}</option>
+                                            <option @if($item->id == $id_position) selected @endif value="/admin/banner/{{$id_website}}/{{$item->id}}">{{$item->title}} @if($item->count_banner)({{$item->count_banner}} banner)@endif</option>
                                         @endforeach
                                     </select>
                                 @endif
@@ -41,6 +41,7 @@
                                 <th class="w-5">ID</th>
                                 <th class="w-10">Thứ tự</th>
                                 <th class="text-left">Tiêu đề</th>
+                                <th class="text-left">Link</th>
                                 <th class="w-15">Thao tác</th>
                             </tr>
                             </thead>
@@ -56,6 +57,7 @@
                                         ]
                                     ?>
                                     <td class="text-left">{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->really_status]!!}</td>
+                                    <td class="text-left">{{$item->link ?? ''}}</td>
                                     <td>
                                         <a class="btn btn-info" href="/admin/banner/update/{{$item->id}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg></a>
                                         <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="/admin/banner/delete/{{$item->id}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg></a>

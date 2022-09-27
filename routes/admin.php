@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth', 'checkPermission']], function () {
     Route::get('/banner','BannerController@index');
     Route::get('/banner/{id_website}/{id_position}','BannerController@index')->where(['id_website' => '[0-9]+', 'id_position' => '[0-9]+']);
     Route::any('/banner/update','BannerController@update');
-    Route::any('/banner/update/{id}','BannerController@update')->where(['id' => '[0-9]+']);
+    Route::any('/banner/update/{id_banner}/{id_website}/{id_position}','BannerController@update')->where(['id_banner' => '[0-9]+', 'id_website' => '[0-9]*', 'id_position' => '[0-9]*']);
     Route::any('/banner/delete/{id}','BannerController@delete')->where(['id' => '[0-9]+']);
 
     Route::get('/banner/site/{type}','BannerController@site')->where(['type' => '[a-z]+']);

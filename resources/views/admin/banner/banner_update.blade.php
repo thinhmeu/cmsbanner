@@ -93,11 +93,11 @@
                                         </div>
                                         <div class="col-2">
                                             <span>Width</span>
-                                            <input type="number" min="1" class="form-control" name="width" value="{{$oneItem->width ?? ''}}">
+                                            <input required type="number" min="1" class="form-control" name="width" value="{{$oneItem->width ?? ''}}">
                                         </div>
                                         <div class="col-2">
                                             <span>Height</span>
-                                            <input type="number" min="1" class="form-control" name="height" value="{{$oneItem->height ?? ''}}">
+                                            <input required type="number" min="1" class="form-control" name="height" value="{{$oneItem->height ?? ''}}">
                                         </div>
                                     </div>
                                 </div>

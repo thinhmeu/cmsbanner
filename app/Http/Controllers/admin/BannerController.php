@@ -24,7 +24,7 @@ class BannerController extends Controller
 
         foreach ($allSite as $site) {
             $listPosition = DB::select("
-                SELECT count(distinct (id_position))
+                SELECT distinct (id_position)
                 FROM banner
                 WHERE id_website = $site->id
                 AND status=1

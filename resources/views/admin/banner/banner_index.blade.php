@@ -59,8 +59,15 @@
                                     <td class="text-left">{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->really_status]!!}</td>
                                     <td class="text-left">{{$item->link ?? ''}}</td>
                                     <td>
-                                        <a class="btn btn-info" href="/admin/banner/update/{{$item->id}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg></a>
-                                        <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="/admin/banner/delete/{{$item->id}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg></a>
+                                        <a class="btn btn-info" href="/admin/banner/duplicate/{{$item->id}}">
+                                            <img loading="lazy" src="/admin/icons/svg/content_copy.svg" alt="" width="23" height="23">
+                                        </a>
+                                        <a class="btn btn-info" href="/admin/banner/update/{{$item->id}}">
+                                            <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg>
+                                        </a>
+                                        <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="/admin/banner/delete/{{$item->id}}">
+                                            <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg>
+                                        </a>
                                     </td>
                                 </tr>
                                 @endforeach @endif

@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth', 'checkPermission']], function () {
     Route::post('/ajax/loadTag','AjaxController@loadTag');
     Route::post('/ajax/loadCategory','AjaxController@loadCategory');
     Route::post('/ajax/ajax_search_post','AjaxController@ajax_search_post');
+    Route::post('/ajax/ajax_duplicate_row/{id}','AjaxController@ajax_duplicate_row')->where(['id' => '[0-9]+']);
     /*Category*/
     Route::get('/category','CategoryController@index');
     Route::any('/category/update','CategoryController@update');
@@ -60,4 +61,5 @@ Route::group(['middleware' => ['auth', 'checkPermission']], function () {
     Route::any('/banner/updateSite/{type}/{id}','BannerController@updateSite')->where(['type' => '[a-z]+', 'id' => '[0-9]+']);
     Route::any('/banner/deleteSite/{id}','BannerController@deleteSite')->where(['id' => '[0-9]+']);
 
+    Route::any('/banner/duplicate/{id}','BannerController@duplicate')->where(['id' => '[0-9]+']);
 });

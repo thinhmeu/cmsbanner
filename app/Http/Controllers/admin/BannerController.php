@@ -24,7 +24,7 @@ class BannerController extends Controller
 
         foreach ($allSite as $site) {
             $listPosition = DB::select("
-                SELECT distinct(id_position)
+                SELECT count(distinct (id_position))
                 FROM banner
                 WHERE id_website = $site->id
                 AND status=1
@@ -130,6 +130,20 @@ class BannerController extends Controller
 
     public function deleteSite($id) {
         Banner_site::destroy($id);
+        return back();
+    }
+
+    public function duplicate($id) {
+        $banner = Banner::where('id', '=', $id)->get()->toArray();
+        if (empty($banner))
+            return back();
+
+        unset($banner[0]['id']);
+        foreach ($banner[0] as $k => $v){
+            $dataSave[$k] = $v;
+        }
+
+        Banner::updateOrInsert(['id' => 0], $dataSave);
         return back();
     }
 }

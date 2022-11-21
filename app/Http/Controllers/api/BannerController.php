@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\ApiController;
-use http\Env\Request;
-use http\Env\Response;
 use Illuminate\Support\Facades\DB;
 
 class BannerController extends ApiController

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Banner extends Model
 {
     use HasFactory;
-
+    public $timestamps = null;
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

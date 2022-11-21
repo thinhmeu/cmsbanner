@@ -3,7 +3,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use http\Env\Response;
-use Request;
+use Illuminate\Http\Request;
+use mysql_xdevapi\Result;
 use Redirect;
 use App\Models\Banner;
 use App\Models\Banner_site;
@@ -145,5 +146,13 @@ class BannerController extends Controller
 
         Banner::updateOrInsert(['id' => 0], $dataSave);
         return back();
+    }
+    public function updateOrder(Request $input){
+        $data = $input->input('order') ?? die();
+        $backLink = $input->input('backLink') ?? die();
+        foreach ($data as $id => $value){
+            Banner::where('id', '=', $id)->update(['order' => $value]);
+        }
+        return Redirect::to($backLink);
     }
 }

@@ -49,7 +49,9 @@
                                 @if(!empty($listItem)) @foreach($listItem as $item)
                                 <tr>
                                     <td>{{$item->id}}</td>
-                                    <td>{{$item->order}}</td>
+                                    <td>
+                                        <input type="number" form="updateOrder" min="1" class="form-control form-control-sm" name="order[{{$item->id}}]" value="{{$item->order}}">
+                                    </td>
 
                                     <?php $reallyStatus = [
                                         '<span class="badge badge-danger">Off</span>',
@@ -66,13 +68,18 @@
                                             <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg>
                                         </a>
                                         <a class="btn btn-info" href="/admin/banner/duplicate/{{$item->id}}">
-                                            <img loading="lazy" src="/admin/icons/svg/content_copy.svg" alt="" width="23" height="23">
+                                            <img loading="lazy" src="/admin/icons/svg/content_copy.svg" alt="" width="23" height="23" style="filter: invert(1)">
                                         </a>
                                     </td>
                                 </tr>
                                 @endforeach @endif
                             </tbody>
                         </table>
+
+                        <form action="<?=url('admin/banner/update_order')?>" id="updateOrder">
+                            <input type="hidden" value="{{Request::getRequestUri()}}" name="backLink">
+                            <button class="btn btn-sm btn-success" type="submit">Update order</button>
+                        </form>
                     </div>
                 </div>
             </div>

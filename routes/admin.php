@@ -62,4 +62,5 @@ Route::group(['middleware' => ['auth', 'checkPermission']], function () {
     Route::any('/banner/deleteSite/{id}','BannerController@deleteSite')->where(['id' => '[0-9]+']);
 
     Route::any('/banner/duplicate/{id}','BannerController@duplicate')->where(['id' => '[0-9]+']);
+    Route::any('/banner/update_order','BannerController@updateOrder');
 });

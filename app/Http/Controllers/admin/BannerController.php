@@ -63,6 +63,7 @@ class BannerController extends Controller
     }
 
     public function update($id_banner = 0, $id_website = '', $id_position = '') {
+        $request = new Request();
         $data = [];
         if ($id_banner > 0){
             $data['oneItem'] = $oneItem = Banner::findOrFail($id_banner);
@@ -74,7 +75,7 @@ class BannerController extends Controller
         $data['id_website'] = $id_website;
         $data['id_position'] = $id_position;
 
-        if (!empty(Request::post())) {
+        if (!empty($request->post())) {
             $post_data = Request::post();
             $post_data['slug'] = toSlug($post_data['title']);
             $post_data['status'] = isset($post_data['status']) ? 1 : 0;

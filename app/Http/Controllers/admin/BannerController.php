@@ -18,7 +18,7 @@ class BannerController extends Controller
 
     /*banner*/
     public function index($id_website = null, $id_position = null) {
-        $data['allSite'] = $allSite = Banner_site::where('type', '=', 'website')->get();
+        $data['allSite'] = $allSite = Banner_site::where('type', '=', 'website')->orderBy('title', 'ASC')->get();
         $id_website = $id_website ?? $allSite[0]->id;
         $data['id_website'] = $id_website;
 
@@ -34,7 +34,7 @@ class BannerController extends Controller
             $site->count_position = count($listPosition);
         }
 
-        $data['allPosition'] = $allPosition = Banner_site::where('type', '=', 'position')->get();
+        $data['allPosition'] = $allPosition = Banner_site::where('type', '=', 'position')->orderBy('title', 'ASC')->get();
         $id_position = $id_position ?? $allPosition[0]->id;
         $data['id_position'] = $id_position;
 

@@ -62,8 +62,8 @@ class BannerController extends Controller
         return view('admin.banner.banner_index', $data);
     }
 
-    public function update($id_banner = 0, $id_website = '', $id_position = '') {
-        $request = new Request();
+    public function update($id_banner = 0, $id_website = '', $id_position = '', Request $request) {
+
         $data = [];
         if ($id_banner > 0){
             $data['oneItem'] = $oneItem = Banner::findOrFail($id_banner);
@@ -113,8 +113,7 @@ class BannerController extends Controller
         return view('admin.banner.site_index', $data);
     }
 
-    public function updateSite($type, $id = 0) {
-        $request = new Request();
+    public function updateSite($type, $id = 0, Request $request) {
         $data = [];
         if ($id > 0)
             $data['oneItem'] = $oneItem = Banner_site::findOrFail($id);

@@ -76,7 +76,7 @@ class BannerController extends Controller
         $data['id_position'] = $id_position;
 
         if (!empty($request->post())) {
-            $post_data = Request::post();
+            $post_data = $request->post();
             $post_data['slug'] = toSlug($post_data['title']);
             $post_data['status'] = isset($post_data['status']) ? 1 : 0;
             Banner::updateOrInsert(['id' => $id_banner], $post_data);
@@ -114,12 +114,13 @@ class BannerController extends Controller
     }
 
     public function updateSite($type, $id = 0) {
+        $request = new Request();
         $data = [];
         if ($id > 0)
             $data['oneItem'] = $oneItem = Banner_site::findOrFail($id);
         $data['type'] = $type;
 
-        $post_data = Request::post();
+        $post_data = $request->post();
 
         if (!empty($post_data)) {
             $post_data['type'] = $type;

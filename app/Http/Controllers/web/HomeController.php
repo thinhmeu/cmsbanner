@@ -50,7 +50,7 @@ class HomeController extends WebController
             'XEMKEO' => ['url' => 'https://xemkeo.top/vskc/api/getAllBanner', 'delimiter' => 'x', 'media_prefix' => 'https://xemkeo.top'],
             'NHACAIUYTIN360' => ['url' => 'https://nhacaiuytin360.net/api/getAllBanner', 'delimiter' => 'x', 'media_prefix' => 'https://nhacaiuytin360.net/'],
             'TRUYEN24' => ['url' => 'https://truyen24.info/api/getAllBanner/', 'delimiter' => '_', 'media_prefix' => 'https://truyen24.info'],
-            'BONGDA365' => ['url' => 'https://bongda365.biz/api/getAllBanner', 'delimiter' => '_', 'media_prefix' => 'https://upload.bongda365.biz'],
+            'BONGDA365' => ['url' => 'https://bongda365.biz/api/getAllBanner', 'delimiter' => '_', 'media_prefix' => 'https://upload.bongda365.biz/'],
             'TUVISO' => ['url' => 'https://tuviso.com/api/getAllBanner/', 'delimiter' => '_', 'media_prefix' => 'https://tuviso.com/public/media'],
         ];
         if (isset($_GET['domain'])) {

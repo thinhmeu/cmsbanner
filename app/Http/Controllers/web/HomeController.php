@@ -65,11 +65,11 @@ class HomeController extends WebController
             echo '<tr><th colspan="2">928x90</th><th colspan="2">728x90</th><th colspan="2">400x100</th><th colspan="2">300x250</th><th colspan="2">130x300</th></tr>';
             for ($i = 0; $i < 100; $i++) {
                 if (isset($_GET['show_image'])) {
-                    $img_928 = '<img src="'.$api['media_prefix'].($banner['928'.$api['delimiter'].'90'][$i]['image'] ?? '').'">';
-                    $img_728 = '<img src="'.$api['media_prefix'].($banner['728'.$api['delimiter'].'90'][$i]['image'] ?? '').'">';
-                    $img_400 = '<img src="'.$api['media_prefix'].($banner['400'.$api['delimiter'].'100'][$i]['image'] ?? '').'">';
-                    $img_300 = '<img src="'.$api['media_prefix'].($banner['300'.$api['delimiter'].'250'][$i]['image'] ?? '').'">';
-                    $img_130 = '<img src="'.$api['media_prefix'].($banner['130'.$api['delimiter'].'300'][$i]['image'] ?? '').'">';
+                    $img_928 = !empty($banner['928'.$api['delimiter'].'90'][$i]['image']) ? '<img src="'.$api['media_prefix'].($banner['928'.$api['delimiter'].'90'][$i]['image'] ?? '').'">' : '';
+                    $img_728 = !empty($banner['728'.$api['delimiter'].'90'][$i]['image']) ? '<img src="'.$api['media_prefix'].($banner['728'.$api['delimiter'].'90'][$i]['image'] ?? '').'">' : '';
+                    $img_400 = !empty($banner['400'.$api['delimiter'].'100'][$i]['image']) ? '<img src="'.$api['media_prefix'].($banner['400'.$api['delimiter'].'100'][$i]['image'] ?? '').'">' : '';
+                    $img_300 = !empty($banner['300'.$api['delimiter'].'250'][$i]['image']) ? '<img src="'.$api['media_prefix'].($banner['300'.$api['delimiter'].'250'][$i]['image'] ?? '').'">' : '';
+                    $img_130 = !empty($banner['130'.$api['delimiter'].'300'][$i]['image']) ? '<img src="'.$api['media_prefix'].($banner['130'.$api['delimiter'].'300'][$i]['image'] ?? '').'">' : '';
                 } else {
                     $img_928 = $img_728 = $img_400 = $img_300 = $img_130 = '';
                 }

@@ -338,7 +338,20 @@ function getDataAPIPost($url, $data = []){
 
     $response = curl_exec($resource);
     curl_close($resource);
-    return json_decode($response);
+    return $response;
+}
+
+function getDataAPI($urlAPI)
+{
+    $curl_handle = curl_init();
+    curl_setopt($curl_handle, CURLOPT_URL,$urlAPI);
+    curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+    curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($curl_handle,CURLOPT_TIMEOUT,5);
+    $data = curl_exec($curl_handle);
+    curl_close($curl_handle);
+    return $data;
 }
 
 function getNumberLinkOut($content) {

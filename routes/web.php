@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 /*404*/
 Route::any('/404.html', 'RouterController@not_found');
 
+Route::get('/allBannerRandom', 'HomeController@allBannerRandom');
 /*Author*/
 Route::get('/author/{slug}{checkAmp}','AuthorController@index')->where(['slug' => '[\d\w-]+', 'checkAmp' => '(/amp)?'])->middleware('Redirect.301')->middleware('Config.Slug');
 Route::get('/author/{slug}/page/{page}{checkAmp}','AuthorController@index')->where(['slug' => '[\d\w-]+', 'page' => '[0-9]+', 'checkAmp' => '(/amp)?'])->middleware('Redirect.301')->middleware('Config.Slug');

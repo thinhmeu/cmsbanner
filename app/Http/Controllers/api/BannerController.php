@@ -16,6 +16,11 @@ WHERE banner_site.`slug` = '$siteName' AND `status` = 1 AND NOW() BETWEEN IFNULL
             $tmp[$item->vitri][] = $item;
         }
         ksort($tmp);
+        $tmp = json_encode($tmp);
+
+        $searchDomain = config('app.searchDomain');
+        $replaceDomain = config('app.replaceDomain');
+        $tmp = str_replace($searchDomain, $replaceDomain, $tmp);
 
         return response($tmp)->withHeaders([
             'Content-Type' => 'application/json',

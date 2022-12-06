@@ -73,6 +73,7 @@ class HomeController extends WebController
                 } else {
                     $img_928 = $img_728 = $img_400 = $img_300 = $img_130 = '';
                 }
+                if (empty($banner['928'.$api['delimiter'].'90'][$i]['image']) && empty($banner['728'.$api['delimiter'].'90'][$i]['image']) && empty($banner['400'.$api['delimiter'].'100'][$i]['image']) && empty($banner['300'.$api['delimiter'].'250'][$i]['image']) && empty($banner['130'.$api['delimiter'].'300'][$i]['image'])) continue;
                 echo '<tr>
 <td>'.$img_928.'</td><td>'.($banner['928'.$api['delimiter'].'90'][$i][$param_url] ?? '').'</td>
 <td>'.$img_728.'</td><td>'.($banner['728'.$api['delimiter'].'90'][$i][$param_url] ?? '').'</td>
@@ -80,7 +81,6 @@ class HomeController extends WebController
 <td>'.$img_300.'</td><td>'.($banner['300'.$api['delimiter'].'250'][$i][$param_url] ?? '').'</td>
 <td>'.$img_130.'</td><td>'.($banner['130'.$api['delimiter'].'300'][$i][$param_url] ?? '').'</td>
 </tr>';
-                if (empty($banner['928'.$api['delimiter'].'90'][$i]['image']) && empty($banner['728'.$api['delimiter'].'90'][$i]['image']) && empty($banner['400'.$api['delimiter'].'100'][$i]['image']) && empty($banner['300'.$api['delimiter'].'250'][$i]['image']) && empty($banner['130'.$api['delimiter'].'300'][$i]['image'])) continue;
             }
             echo '</table>';
         }

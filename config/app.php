@@ -192,7 +192,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -233,5 +232,24 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
 
     ],
-
+    'searchDomain' => [
+        'xosoplus.win',
+        'xoso888.club',
+        'ketqua247.net',
+        'soicau247.club',
+        'soicauxsmb.vip',
+        'soicaulodechuan.com',
+        'xsmb.club',
+        'soicauxoso.club'
+    ],
+    'replaceDomain' => [
+        'xosoplus.win',
+        'xoso888.club',
+        'ketqua247.me',
+        'soicau247.blog',
+        'soicauxsmb.blog',
+        'soicaulodechuan.com',
+        'xsmb.club',
+        'soicauxoso.club'
+    ]
 ];

@@ -45,7 +45,7 @@ class HomeController extends WebController
 
     public function allBannerRandom() {
         $list_api = [
-            'XOSO888' => ['url' => 'https://xoso888.vip/Api_request/getAllBanner', 'delimiter' => '_', 'media_prefix' => 'https://xoso888.vip/public/media'],
+            'XOSO888' => ['url' => 'https://xoso888.club/Api_request/getAllBanner', 'delimiter' => '_', 'media_prefix' => 'https://xoso888.vip/public/media'],
             'XOSOPLUS' => ['url' => 'https://xosoplus.win/api/getAllBanner', 'delimiter' => '_', 'media_prefix' => 'https://xosoplus.win/public/media'],
             'XEMKEO' => ['url' => 'https://xemkeo.top/vskc/api/getAllBanner', 'delimiter' => 'x', 'media_prefix' => 'https://xemkeo.top'],
             'NHACAIUYTIN360' => ['url' => 'https://nhacaiuytin360.net/api/getAllBanner', 'delimiter' => 'x', 'media_prefix' => 'https://nhacaiuytin360.net/'],

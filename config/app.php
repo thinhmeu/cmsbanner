@@ -244,8 +244,8 @@ return [
     ],
     'replaceDomain' => [
         'xosoplus.win',
-        'xoso888.club',
-        'ketqua247.me',
+        'xoso888.win',
+        'ketqua247.blog',
         'soicau247.blog',
         'soicauxsmb.blog',
         'soicaulodechuan.com',

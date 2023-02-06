@@ -68,6 +68,7 @@ class BannerController extends Controller
         if ($id_banner > 0){
             $data['oneItem'] = $oneItem = Banner::findOrFail($id_banner);
         }
+        $data['type'] = $oneItem->type ?? 'default';
 
         $data['allSite'] = $allSite = Banner_site::where('type', '=', 'website')->get();
         $data['allPosition'] = $allPosition = Banner_site::where('type', '=', 'position')->get();
@@ -77,8 +78,14 @@ class BannerController extends Controller
 
         if (!empty($request->post())) {
             $post_data = $request->post();
+            if (!isset($post_data['clickSubmit'])){
+                if (isset($post_data['type']))
+                    $data['type'] = $post_data['type'];
+                return view('admin.banner.banner_update', $data);
+            }
             $post_data['slug'] = toSlug($post_data['title']);
             $post_data['status'] = isset($post_data['status']) ? 1 : 0;
+            unset($post_data['clickSubmit']);
             Banner::updateOrInsert(['id' => $id_banner], $post_data);
             return Redirect::to('/admin/banner/'.$post_data['id_website'].'/'.$post_data['id_position']);
         }

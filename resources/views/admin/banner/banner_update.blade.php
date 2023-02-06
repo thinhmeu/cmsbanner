@@ -10,10 +10,19 @@
                                 <div class="card-header"><strong>{{!empty($oneItem) ? 'Chỉnh sửa' : 'Thêm mới'}} Banner</strong></div>
                                 <div class="card-body">
                                     <div class="row align-items-center">
-                                        <div class="col-12">
+                                        <div class="col-12 col-lg-6">
                                             <div class="form-group">
                                                 <b>Tiêu đề Banner</b>
                                                 <input name="title" class="form-control" value="{{$oneItem->title ?? ''}}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <b>Kiểu banner:</b>
+                                                <select name="type" class="form-control" onchange="this.form.submit()">
+                                                    <option type="text" value="default" {{$type == 'default' ? 'selected' : ''}}>default</option>
+                                                    <option type="text" value="content" {{$type == 'content' ? 'selected' : ''}}>content</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-6">
@@ -57,54 +66,23 @@
                                         <div class="col-3">
                                             <div>On/Off</div>
                                             @php
-                                                if (empty($oneItem) || $oneItem->status == 1)
+                                                if ($oneItem->status ?? 0 == 1)
                                                     $checked = 'checked';
                                                 else $checked = ''
                                             @endphp
                                             <input type="checkbox" name="status" {{$checked}}>
                                         </div>
-
-                                        <div class="col-12 my-3">
-                                            <b>Nội dung link</b>
-                                        </div>
-                                        <div class="col-6">
-                                            <span>Link</span>
-                                            <input type="text" class="form-control" name="link" value="{{$oneItem->link ?? ''}}" required>
-                                        </div>
-                                        <div class="col-2">
-                                            <span>Target</span>
-                                            <input class="form-control" type="text" name="target" value="{{$oneItem->target ?? '_blank'}}">
-                                        </div>
-                                        <div class="col-2">
-                                            <span>Rel</span>
-                                            <input class="form-control" type="text" name="rel" value="{{$oneItem->rel ?? 'nofollow'}}">
-                                        </div>
-
-                                        <div class="col-12 my-3">
-                                            <b>Nội dung ảnh banner</b>
-                                        </div>
-                                        <div class="col-6">
-                                            <label>Image</label>
-                                            <input class="form-control" type="text" name="image" value="{{$oneItem->image ?? ''}}">
-                                        </div>
-                                        <div class="col-2">
-                                            <span>Alt</span>
-                                            <input type="text" class="form-control" name="alt" value="{{$oneItem->alt ?? ''}}">
-                                        </div>
-                                        <div class="col-2">
-                                            <span>Width</span>
-                                            <input required type="number" min="1" class="form-control" name="width" value="{{$oneItem->width ?? ''}}">
-                                        </div>
-                                        <div class="col-2">
-                                            <span>Height</span>
-                                            <input required type="number" min="1" class="form-control" name="height" value="{{$oneItem->height ?? ''}}">
-                                        </div>
+                                        @php if($type == 'default')
+                                        echo view('admin.banner.type.default', ['oneItem' => $oneItem ?? []]);
+                                        else
+                                        echo view('admin.banner.type.content', ['oneItem' => $oneItem ?? []]);
+                                        @endphp
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group float-right">
-                            <button type="submit" class="btn btn-primary">Lưu trữ</button>
+                            <input type="submit" name="clickSubmit" class="btn btn-primary">
                         </div>
                     </div>
                 </form>

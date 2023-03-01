@@ -35,46 +35,48 @@
                             </div>
                         </form>
 
-                        <table class="table table-striped table-bordered datatable text-center">
-                            <thead>
-                            <tr>
-                                <th class="w-5">ID</th>
-                                <th class="w-10">Thứ tự</th>
-                                <th class="text-left">Tiêu đề</th>
-                                <th class="text-left">Link</th>
-                                <th class="w-15">Thao tác</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                @if(!empty($listItem)) @foreach($listItem as $item)
+                        <div class="overflow-auto">
+                            <table class="table table-striped table-bordered datatable text-center">
+                                <thead>
                                 <tr>
-                                    <td>{{$item->id}}</td>
-                                    <td>
-                                        <input type="number" form="updateOrder" min="1" class="form-control form-control-sm" name="order[{{$item->id}}]" value="{{$item->order}}">
-                                    </td>
-
-                                    <?php $reallyStatus = [
-                                        '<span class="badge badge-danger">Off</span>',
-                                        '<span class="badge badge-success">On</span>',
-                                        ]
-                                    ?>
-                                    <td class="text-left">{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->really_status]!!}</td>
-                                    <td class="text-left">{{$item->link ?? ''}}</td>
-                                    <td>
-                                        <a class="btn btn-info" href="/admin/banner/update/{{$item->id}}">
-                                            <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg>
-                                        </a>
-                                        <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="/admin/banner/delete/{{$item->id}}">
-                                            <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg>
-                                        </a>
-                                        <a class="btn btn-info" href="/admin/banner/duplicate/{{$item->id}}">
-                                            <img loading="lazy" src="/admin/icons/svg/content_copy.svg" alt="" width="23" height="23" style="filter: invert(1)">
-                                        </a>
-                                    </td>
+                                    <th class="w-5">ID</th>
+                                    <th class="w-10">Thứ tự</th>
+                                    <th class="text-left">Tiêu đề</th>
+                                    <th class="text-left">Link</th>
+                                    <th class="w-15">Thao tác</th>
                                 </tr>
+                                </thead>
+                                <tbody>
+                                @if(!empty($listItem)) @foreach($listItem as $item)
+                                    <tr>
+                                        <td>{{$item->id}}</td>
+                                        <td>
+                                            <input type="number" form="updateOrder" min="1" class="form-control form-control-sm" name="order[{{$item->id}}]" value="{{$item->order}}">
+                                        </td>
+
+                                        <?php $reallyStatus = [
+                                            '<span class="badge badge-danger">Off</span>',
+                                            '<span class="badge badge-success">On</span>',
+                                        ]
+                                        ?>
+                                        <td class="text-left">{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->really_status]!!}</td>
+                                        <td class="text-left">{{$item->link ?? ''}}</td>
+                                        <td>
+                                            <a class="btn btn-info" href="/admin/banner/update/{{$item->id}}">
+                                                <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg>
+                                            </a>
+                                            <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="/admin/banner/delete/{{$item->id}}">
+                                                <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg>
+                                            </a>
+                                            <a class="btn btn-info" href="/admin/banner/duplicate/{{$item->id}}">
+                                                <img loading="lazy" src="/admin/icons/svg/content_copy.svg" alt="" width="23" height="23" style="filter: invert(1)">
+                                            </a>
+                                        </td>
+                                    </tr>
                                 @endforeach @endif
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
 
                         <form action="<?=url('admin/banner/update_order')?>" id="updateOrder">
                             <input type="hidden" value="{{Request::getRequestUri()}}" name="backLink">

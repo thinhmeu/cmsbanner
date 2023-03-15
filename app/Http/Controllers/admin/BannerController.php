@@ -56,7 +56,7 @@ class BannerController extends Controller
             FROM banner
             WHERE id_website = $id_website
             AND id_position = $id_position
-            ORDER BY `order` ASC, id ASC
+            ORDER BY `status` DESC, `order` ASC, id ASC
         ");
         $data['listItem'] = $listItem;
         return view('admin.banner.banner_index', $data);

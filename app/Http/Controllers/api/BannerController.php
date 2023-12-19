@@ -32,10 +32,10 @@ WHERE banner_site.`slug` = '$siteName' AND `status` = 1 AND NOW() BETWEEN IFNULL
     private function replaceKeyDomain($content){
         $dataKeyDomain = $this->getKeyDomain();
 
-        return preg_replace_callback("#\\\/mlink\\\/\?branchseo=([\w\d-]+)#m", function ($m) use ($dataKeyDomain){
+        return preg_replace_callback("#\[([\w\d-]+)\]#", function ($m) use ($dataKeyDomain){
             $key = $m[1];
             if (isset($dataKeyDomain[$key])){
-                return $dataKeyDomain[$key].$m[0];
+                return $dataKeyDomain[$key];
             } else {
                 return '#';
             }
@@ -49,7 +49,7 @@ WHERE banner_site.`slug` = '$siteName' AND `status` = 1 AND NOW() BETWEEN IFNULL
             $craw = Http::get("https://r.bmbmic88.com//read.php?action=SEARCH_DOMAIN&brand=domains&u=mkt1");
             if ($craw->status() != 200)
                 return [];
-            preg_match_all("#([\w\d-]+)\",\"name\":\"([\d\w\.]+\.\w+)#", $craw->body(), $m);
+            preg_match_all("#([\w\d-]+)\",\"name\":\"([^\"]+)#", $craw->body(), $m);
             $data = array_combine($m[1], $m[2]);
             foreach ($data as &$i)
                 $i = "https:\/\/{$i}";

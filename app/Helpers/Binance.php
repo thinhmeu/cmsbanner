@@ -52,6 +52,7 @@ class Binance{
         $bought = false;
         do{
             $this->priceNow = $this->api->price($this->symbol);
+            dump("Giá hiện tại $this->priceNow - Giá muốn mua $this->buyPrice");
             if ($this->priceNow < $this->buyPrice){
                 if ($this->priceNow <= $min){
                     $min = $this->priceNow;
@@ -90,6 +91,7 @@ class Binance{
         $sold = false;
         do{
             $this->priceNow = $this->api->price($this->symbol);
+            dump("Giá hiện tại $this->priceNow - Giá muốn bán $this->buyPrice");
             if ($this->priceNow > $this->buyPrice){
                 if ($this->priceNow >= $max){
                     $max = $this->priceNow;

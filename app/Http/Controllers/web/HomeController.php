@@ -7,10 +7,16 @@ use App\Models\BoxNews;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\TopGame;
+use App\Console\Commands\AutoTrade;
 
 class HomeController extends WebController
 {
     public function index(){
+        $a = new AutoTrade();
+        $a->handle();
+        dd('zxc');
+
+
         $oneItem = BoxNews::find(1);
         if (!empty($oneItem)) {
             $oneItem = json_decode($oneItem->data);

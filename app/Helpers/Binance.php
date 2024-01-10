@@ -102,7 +102,7 @@ class Binance{
     private function findTheBestSellPrice(){
         $max = $this->sellPrice;
         $sold = false;
-        dump("Tìm giá bán đẹp $this->buyPrice");
+        dump("Tìm giá bán đẹp $this->sellPrice");
         do{
             $this->priceNow = $this->api->price($this->symbol);
             if ($this->priceNow > $this->buyPrice){

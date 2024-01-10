@@ -6,7 +6,7 @@ use Mockery\Exception;
 
 class Binance{
     protected $api, $symbol, $invest, $buyPrice, $sellPrice, $tryToSell;
-    protected $priceNow, $baseAsset, $quoteAsset, $orderId, $orderFilled;
+    protected $priceNow, $baseAsset, $quoteAsset, $orderId, $orderFilled, $order;
     protected $timeInterval = 3;
     public function __construct(API $binance, $symbol, $invest, $buyPrice, $sellPrice){
         $this->api = $binance;
@@ -25,15 +25,26 @@ class Binance{
     }
     public function auto(){
         $this->findTheBestBuyPrice();
-        $this->buy();
-        if ($this->orderId){
-            $this->checkOrder();
-        }
+        $this->tryBuy();
+        $this->checkOrder();
         if ($this->orderFilled){
             $this->findTheBestSellPrice();
-            $this->sell();
+            $this->trySell();
         }
     }
+    public function buy(){
+        $this->findTheBestBuyPrice();
+        $this->tryBuy();
+        if ($this->orderId)
+            $this->checkOrder();
+    }
+    public function sell(){
+        $this->findTheBestSellPrice();
+        $this->trySell();
+        if ($this->orderId)
+            $this->checkOrder();
+    }
+
     private function getQuantityToBuy(){
         $exchangeInfo = $this->exchangeInfo()[$this->symbol]['filters'][1];
         $stepSize = $exchangeInfo['stepSize'];
@@ -50,9 +61,9 @@ class Binance{
     private function findTheBestBuyPrice(){
         $min = $this->buyPrice;
         $bought = false;
+        dump("Tìm giá mua đẹp $this->buyPrice");
         do{
             $this->priceNow = $this->api->price($this->symbol);
-            dump("Giá hiện tại $this->priceNow - Giá muốn mua $this->buyPrice");
             if ($this->priceNow < $this->buyPrice){
                 if ($this->priceNow <= $min){
                     $min = $this->priceNow;
@@ -66,12 +77,13 @@ class Binance{
         } while (!$bought);
         return true;
     }
-    private function buy(){
+    private function tryBuy(){
         try {
             $quantity = $this->getQuantityToBuy();
 
             $order = $this->api->buy($this->symbol, $quantity, 0, "MARKET");
             $this->orderId = $order['orderId'];
+            $this->order = $order;
         } catch (\Exception $e){
             return null;
         }
@@ -82,16 +94,17 @@ class Binance{
             if ($order['status'] !== 'FILLED'){
                 sleep($this->timeInterval);
             } else {
-                $this->orderFilled = true;
+                dump("Đã mua ".rtrim($order['origQty'], '0')." {$this->baseAsset}");
+                $this->orderId = false;
             }
-        } while (!$this->orderFilled);
+        } while ($this->orderId != false);
     }
     private function findTheBestSellPrice(){
         $max = $this->sellPrice;
         $sold = false;
+        dump("Tìm giá bán đẹp $this->buyPrice");
         do{
             $this->priceNow = $this->api->price($this->symbol);
-            dump("Giá hiện tại $this->priceNow - Giá muốn bán $this->buyPrice");
             if ($this->priceNow > $this->buyPrice){
                 if ($this->priceNow >= $max){
                     $max = $this->priceNow;
@@ -117,9 +130,10 @@ class Binance{
         }
         throw new \Exception("Số lượng bán ra phải từ $min -> $max");
     }
-    private function sell(){
+    private function trySell(){
         $quantity = $this->getQuantityToSell();
-        $this->api->sell($this->symbol, $quantity, 0, "MARKET");
+        $order = $this->api->sell($this->symbol, $quantity, 0, "MARKET");
+        $this->orderId = $order['orderId'];
     }
     private function exchangeInfo(){
         $keyCache = __FUNCTION__;

@@ -13,7 +13,7 @@ class AutoTrade extends Command
      *
      * @var string
      */
-    protected $signature = 'autotrade';
+    protected $signature = 'autotrade {param}';
 
     /**
      * The console command description.
@@ -39,15 +39,28 @@ class AutoTrade extends Command
      */
     public function handle()
     {
+        $params = $this->argument("param");
+        $params = explode(',', $params);
+        if (count($params) != 5){
+            dd("param truyền vào {action,symbol,invest,buyPrice,sellPrice}");
+        }
+        [$action, $symbol, $invest, $buyPrice, $sellPrice] = $params;
 //        $binance = new API(env("BINANCE_API_KEY_TEST"), env("BINANCE_API_SECRET_TEST"), 1);
         $binance = new API(env("BINANCE_API_KEY"), env("BINANCE_API_SECRET"), env("BINANCE_TESTNET"));
-        $a = new Binance($binance,"BNBUSDT",10,290,310);
+        $a = new Binance($binance,strtoupper($symbol),$invest,$buyPrice,$sellPrice);
+
         try {
-            $a->auto();
+            switch ($action){
+                case "auto":
+                    $a->auto(); break;
+                case "buy":
+                    $a->buy(); break;
+                case "sell":
+                    $a->sell(); break;
+            }
         } catch (\Exception $e){
-            dd($e);
+            dd($e->getMessage());
         }
-        dd(123);
         return 0;
     }
 }

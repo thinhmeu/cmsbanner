@@ -94,7 +94,8 @@ class Binance{
             if ($order['status'] !== 'FILLED'){
                 sleep($this->timeInterval);
             } else {
-                dump("Đã mua ".rtrim($order['origQty'], '0')." {$this->baseAsset}");
+                $check = ["BUY" => "BOUGHT", "SELL" => "SOLD"][$order['side']];
+                dump("$check ".rtrim($order['origQty'], '0')." {$this->baseAsset}");
                 $this->orderId = false;
             }
         } while ($this->orderId != false);
@@ -105,7 +106,7 @@ class Binance{
         dump("Tìm giá bán đẹp $this->sellPrice");
         do{
             $this->priceNow = $this->api->price($this->symbol);
-            if ($this->priceNow > $this->buyPrice){
+            if ($this->priceNow > $this->sellPrice){
                 if ($this->priceNow >= $max){
                     $max = $this->priceNow;
                     sleep($this->timeInterval);

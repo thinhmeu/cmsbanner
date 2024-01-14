@@ -3,6 +3,7 @@ namespace App\Helpers;
 use Binance\API;
 use Illuminate\Support\Facades\Cache;
 use Mockery\Exception;
+use App\Helpers\Telegram;
 
 class Binance{
     protected $api, $symbol, $invest, $buyPrice, $sellPrice, $tryToSell;
@@ -61,7 +62,7 @@ class Binance{
     private function findTheBestBuyPrice(){
         $min = $this->buyPrice;
         $bought = false;
-        dump("Tìm giá mua đẹp $this->buyPrice");
+        Telegram::sendMessage("Tìm giá mua $this->baseAsset đẹp $this->buyPrice");
         do{
             $this->priceNow = $this->api->price($this->symbol);
             if ($this->priceNow < $this->buyPrice){
@@ -95,7 +96,7 @@ class Binance{
                 sleep($this->timeInterval);
             } else {
                 $check = ["BUY" => "BOUGHT", "SELL" => "SOLD"][$order['side']];
-                dump("$check ".rtrim($order['origQty'], '0')." {$this->baseAsset}");
+                Telegram::sendMessage("$check ".rtrim($order['origQty'], '0')." {$this->baseAsset}");
                 $this->orderId = false;
             }
         } while ($this->orderId != false);
@@ -103,7 +104,7 @@ class Binance{
     private function findTheBestSellPrice(){
         $max = $this->sellPrice;
         $sold = false;
-        dump("Tìm giá bán đẹp $this->sellPrice");
+        Telegram::sendMessage("Tìm giá bán $this->baseAsset đẹp $this->sellPrice");
         do{
             $this->priceNow = $this->api->price($this->symbol);
             if ($this->priceNow > $this->sellPrice){

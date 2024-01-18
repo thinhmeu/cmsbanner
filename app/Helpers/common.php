@@ -1,5 +1,5 @@
 <?php
-use Cookie;
+use Illuminate\Support\Facades\Cookie;
 use App\Models\Rating;
 
 function toSlug($doc)
@@ -100,7 +100,7 @@ function getListPermission() {
 }
 
 function getCurrentController() {
-    $controller = class_basename(Route::current()->controller);
+    $controller = class_basename(Route::current()->controller ?? '');
     return strtolower(str_replace('Controller', '', $controller));
 }
 

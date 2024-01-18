@@ -1,14 +1,16 @@
 <?php
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\AdminUrl;
 use App\Http\Controllers\Controller;
-use http\Env\Response;
-use Illuminate\Http\Request;
-use mysql_xdevapi\Result;
-use Redirect;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Banner;
 use App\Models\Banner_site;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
+
+use Illuminate\Support\Facades\Route;
 
 class BannerController extends Controller
 {
@@ -98,42 +100,48 @@ class BannerController extends Controller
     }
 
     /*banner site*/
-    public function site($type){
-        $data['page'] = $page = $_GET['page'] ?? 1;
-        $data['s'] = $keySeach = $_GET['s'] ?? null;
-        $data['limit'] = $limit = 10;
+    public function site($type, $id = null){
+        if ($id === null){
+            return $this->listSite($type);
+        } else {
+            return $this->updateOrInsertSite($type, $id);
+        }
+    }
+    private function listSite($type){
+        $limit = 10;
+        $keySeach = $_GET['keyword'] ?? null;
 
         $condition = [
             ['type', '=', $type],
             ['title', 'like', '%'.$keySeach.'%']
         ];
-        $data['pagination'] = $pagination = ceil(Banner_site::where($condition)->count() / $limit);
 
         $allSite = Banner_site::where($condition)
-            ->offset(($page-1)*$limit)
-            ->limit($limit)
-            ->get();
+            ->paginate($limit);
+        $allSite->appends(Request::input());
 
-        $data['allSite'] = $allSite;
-        $data['type'] = $type;
-
+        $data = [
+            'keyword' => $keySeach,
+            'data' => $allSite,
+            'type' => $type
+        ];
         return view('admin.banner.site_index', $data);
     }
-
-    public function updateSite($type, $id = 0, Request $request) {
-        $data = [];
+    private function updateOrInsertSite($type, $id){
         if ($id > 0)
-            $data['oneItem'] = $oneItem = Banner_site::findOrFail($id);
-        $data['type'] = $type;
-
-        $post_data = $request->post();
+            $oneItem = Banner_site::findOrFail($id);
+        $post_data = Request::post();
 
         if (!empty($post_data)) {
             $post_data['type'] = $type;
             $post_data['slug'] = toSlug($post_data['title']);
             Banner_site::updateOrInsert(['id' => $id], $post_data);
-            return Redirect::to('/admin/banner/site/'.$type);
+            return Redirect::to(AdminUrl::getUrlBannerSite($type, null));
         }
+        $data = [
+            'oneItem' => $oneItem ?? null,
+            'type' => $type
+        ];
         return view('admin.banner.site_update', $data);
     }
 

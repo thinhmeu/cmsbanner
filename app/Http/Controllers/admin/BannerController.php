@@ -69,8 +69,8 @@ class BannerController extends Controller
             $type = $oneItem->type;
         }
 
-        $allSite = Banner_site::where('type', '=', 'website')->get();
-        $allPosition = Banner_site::where('type', '=', 'position')->get();
+        $allSite = Banner_site::getWebsiteWithCountPosition();
+        $allPosition = Banner_site::getPositionWithCountBanner();
 
         $post_data = $_POST;
 
@@ -132,6 +132,7 @@ class BannerController extends Controller
         ];
 
         $allSite = Banner_site::where($condition)
+            ->orderBy('title', 'asc')
             ->paginate($limit);
         $allSite->appends($this->request->input());
 

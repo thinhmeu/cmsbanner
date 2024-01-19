@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Helpers\Binance;
+use App\Helpers\Telegram;
 use Binance\API;
 use Illuminate\Console\Command;
 
@@ -59,7 +60,7 @@ class AutoTrade extends Command
                     $a->sell(); break;
             }
         } catch (\Exception $e){
-            dd($e->getMessage());
+            Telegram::sendMessage($e->getMessage());
         }
         return 0;
     }

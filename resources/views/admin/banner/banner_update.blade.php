@@ -4,6 +4,7 @@
         <div class="container-fluid">
             <div class="fade-in">
                 <form method="post" action="">
+                    @csrf
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -28,32 +29,28 @@
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group">
                                                 <label>Website</label>
-                                                <select name="id_website" class="form-control">
-                                                    @if(!empty($allSite))
-                                                        @foreach($allSite as $item)
-                                                            <option @if((!empty($oneItem) && $oneItem->id_website == $item->id)  || (!empty($id_website) && $id_website == $item->id)) selected @endif
-                                                            value="{{$item->id}}">{{$item->title}}</option>
-                                                        @endforeach
-                                                    @endif
+                                                <select name="id_website" class="form-control" required>
+                                                    @foreach($allSite as $item)
+                                                        <option @if($id_website == $item->id) selected @endif
+                                                        value="{{$item->id}}">{{$item->title}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group">
                                                 <label>Vị trí</label>
-                                                <select name="id_position" class="form-control">
-                                                @if(!empty($allPosition))
-                                                    @foreach($allPosition as $item)
-                                                        <option @if((!empty($oneItem) && $oneItem->id_position == $item->id) || (!empty($id_position) && $id_position == $item->id)) selected @endif
-                                                        value="{{$item->id}}">{{$item->title}}</option>
-                                                    @endforeach
-                                                @endif
+                                                <select name="id_position" class="form-control" required>
+                                                @foreach($allPosition as $item)
+                                                    <option @if($id_position == $item->id) selected @endif
+                                                    value="{{$item->id}}">{{$item->title}}</option>
+                                                @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <span>STT</span>
-                                            <input type="number" class="form-control" min="0" name="order" value="{{ $oneItem->order ?? 0 }}">
+                                            <input required type="number" class="form-control" min="1" name="order" value="{{ $oneItem->order ?? 1 }}">
                                         </div>
                                         <div class="col-3">
                                             <span>Start date</span>
@@ -65,17 +62,12 @@
                                         </div>
                                         <div class="col-3">
                                             <div>On/Off</div>
-                                            @php
-                                                if ($oneItem->status ?? 0 == 1)
-                                                    $checked = 'checked';
-                                                else $checked = ''
-                                            @endphp
-                                            <input type="checkbox" name="status" {{$checked}}>
+                                            <input type="checkbox" name="status" value="1" @if($oneItem->status ?? 1 != 0) checked @endif>
                                         </div>
                                         @php if($type == 'default')
-                                        echo view('admin.banner.type.default', ['oneItem' => $oneItem ?? []]);
+                                            echo view('admin.banner.type.default', ['oneItem' => $oneItem ?? []]);
                                         else
-                                        echo view('admin.banner.type.content', ['oneItem' => $oneItem ?? []]);
+                                            echo view('admin.banner.type.content', ['oneItem' => $oneItem ?? []]);
                                         @endphp
                                     </div>
                                 </div>

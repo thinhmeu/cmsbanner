@@ -3,35 +3,42 @@
     <main class="c-main">
         <div class="container-fluid">
             <div class="fade-in">
-                <div class="card">
+                <div class="card" method="get">
                     <div class="card-header">
                         Danh sách Banner
-                        <div class="card-header-actions pr-1">
-                            <a href="/admin/banner/update/0/{{$id_website}}/{{$id_position}}"><button class="btn btn-block btn-primary btn-sm mr-3" type="button">Thêm mới</button></a>
-                        </div>
                     </div>
 
                     <div class="card-body">
-                        <form action="" class="row my-3">
-                            <div class="col-12 col-lg-6">
+                        <form class="row my-3 no-gutters gap-3">
+                            <div>
                                 <b>Chọn website</b>
                                 @if(!empty($allSite))
-                                    <select class="form-control" onchange="this.form.action = this.value; this.form.submit()">
+                                    <select class="form-control changeToSubmitForm" name="id_website">
+                                        <option value="0">Tất cả</option>
                                         @foreach($allSite as $item)
-                                            <option @if($item->id == $id_website) selected @endif value="/admin/banner/{{$item->id}}/{{$id_position}}">{{$item->title}} ({{$item->count_position}} vị trí có banner)</option>
+                                            <option @if($item->id == $id_website) selected @endif value="{{$item->id}}">{{$item->title}} ({{$item->count_position}} vị trí có banner)</option>
                                         @endforeach
                                     </select>
                                 @endif
                             </div>
-                            <div class="col-12 col-lg-6">
+                            <div>
                                 <b>Chọn vị trí</b>
                                 @if(!empty($allPosition))
-                                    <select class="form-control" onchange="this.form.action = this.value; this.form.submit()">
+                                    <select class="form-control changeToSubmitForm" name="id_position">
+                                        <option value="0">Tất cả</option>
                                         @foreach($allPosition as $item)
-                                            <option @if($item->id == $id_position) selected @endif value="/admin/banner/{{$id_website}}/{{$item->id}}">{{$item->title}} @if($item->count_banner)({{$item->count_banner}} banner)@endif</option>
+                                            <option @if($item->id == $id_position) selected @endif value="{{$item->id}}">{{$item->title}} @if($item->count_banner)({{$item->count_banner}} banner)@endif</option>
                                         @endforeach
                                     </select>
                                 @endif
+                            </div>
+                            <div>
+                                <b>Tìm kiếm</b>
+                                <input class="form-control" type="text" name="keyword" value="{{$keyword}}">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Lọc</button>
+                            <div class="col-12">
+                                <button name="addBanner" value="1" class="btn btn-primary btn-sm mr-3">Thêm mới</button>
                             </div>
                         </form>
 
@@ -51,7 +58,7 @@
                                     <tr>
                                         <td>{{$item->id}}</td>
                                         <td>
-                                            <input type="number" form="updateOrder" min="1" class="form-control form-control-sm" name="order[{{$item->id}}]" value="{{$item->order}}">
+                                            <input type="number" min="1" class="form-control form-control-sm" name="order[{{$item->id}}]" value="{{$item->order}}">
                                         </td>
 
                                         <?php $reallyStatus = [
@@ -59,30 +66,31 @@
                                             '<span class="badge badge-success">On</span>',
                                         ]
                                         ?>
-                                        <td class="text-left">{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->really_status]!!}</td>
+                                        <td class="text-left">{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->recent_status]!!}</td>
                                         <td class="text-left">{{$item->link ?? ''}}</td>
                                         <td>
-                                            <a class="btn btn-info" href="/admin/banner/update/{{$item->id}}">
-                                                <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg>
-                                            </a>
-                                            <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="/admin/banner/delete/{{$item->id}}">
-                                                <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg>
-                                            </a>
-                                            <a class="btn btn-info" href="/admin/banner/duplicate/{{$item->id}}">
-                                                <img loading="lazy" src="/admin/icons/svg/content_copy.svg" alt="" width="23" height="23" style="filter: invert(1)">
-                                            </a>
+                                            <div class="d-flex flex-wrap gap-3">
+                                                <a class="btn btn-info" href="{{route("getUrlBannerUpdate", [$item->id])}}">
+                                                    <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg>
+                                                </a>
+                                                <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="{{route("getUrlBannerDelete", [$item->id])}}">
+                                                    <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg>
+                                                </a>
+                                                <a class="btn btn-info" href="{{route("getUrlBannerDuplicate", [$item->id])}}">
+                                                    <img loading="lazy" src="/admin/icons/svg/content_copy.svg" alt="" width="23" height="23" style="filter: invert(1)">
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach @endif
                                 </tbody>
                             </table>
                         </div>
-
-                        <form action="<?=url('admin/banner/update_order')?>" id="updateOrder">
-                            <input type="hidden" value="{{Request::getRequestUri()}}" name="backLink">
-                            <button class="btn btn-sm btn-success" type="submit">Update order</button>
+                        <form action="" id="formUpdateOrder">
+                            <button name="updateOrder" value="1" class="btn btn-sm btn-success">Update order</button>
                         </form>
                     </div>
+                    {{$listItem->links()}}
                 </div>
             </div>
         </div>

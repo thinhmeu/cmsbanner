@@ -20,6 +20,9 @@ $(document).ready(function () {
         "order": [[ 0, "desc" ]]
     });
     $('#redirect').attr('style', 'border-collapse: collapse !important');
+    $(document).on('change', '.changeToSubmitForm', function (){
+        this.form.submit();
+    });
 });
 
 

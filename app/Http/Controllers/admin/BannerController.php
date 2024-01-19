@@ -1,101 +1,116 @@
 <?php
 namespace App\Http\Controllers\admin;
 
-use App\Helpers\AdminUrl;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Banner;
 use App\Models\Banner_site;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
-
-use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 class BannerController extends Controller
 {
-    public function __construct()
+    public $request;
+    public function __construct(Request $request)
     {
         parent::__construct();
+        $this->request = $request;
     }
 
     /*banner*/
-    public function index($id_website = null, $id_position = null) {
-        $data['allSite'] = $allSite = Banner_site::where('type', '=', 'website')->orderBy('title', 'ASC')->get();
-        $id_website = $id_website ?? $allSite[0]->id;
-        $data['id_website'] = $id_website;
-
-        foreach ($allSite as $site) {
-            $listPosition = DB::select("
-                SELECT distinct (id_position)
-                FROM banner
-                WHERE id_website = $site->id
-                AND status=1
-                AND NOW() BETWEEN IFNULL(start_date,'1900-01-01') AND IFNULL(end_date,NOW())
-                ORDER BY `order` ASC, id ASC
-            ");
-            $site->count_position = count($listPosition);
+    public function index() {
+        if ($this->request->get('addBanner')){
+            return \redirect()->route("getUrlBannerUpdate", array_merge([0], $_GET));
+        } elseif ($this->request->get('updateOrder')){
+            return $this->updateOrder();
+        } else {
+            return $this->showListBanner();
         }
+    }
+    private function showListBanner(){
+        $id_website = $this->request->get('id_website');
+        $id_position = $this->request->get('id_position');
+        $keyword = $this->request->get('keyword');
 
-        $data['allPosition'] = $allPosition = Banner_site::where('type', '=', 'position')->orderBy('title', 'ASC')->get();
-        $id_position = $id_position ?? $allPosition[0]->id;
-        $data['id_position'] = $id_position;
+        $allSite = Banner_site::getWebsiteWithCountPosition();
+        $allPosition = Banner_site::getPositionWithCountBanner($id_website);
+        $listItem = Banner::getListBanner($id_website, $id_position, $keyword);
 
-        foreach ($allPosition as $position) {
-            $listBanner = DB::select("
-                SELECT *
-                FROM banner
-                WHERE id_website = $id_website
-                AND id_position = $position->id
-                AND status=1
-                AND NOW() BETWEEN IFNULL(start_date,'1900-01-01') AND IFNULL(end_date,NOW())
-            ");
-            $position->count_banner = count($listBanner);
-        }
-
-        $listItem = DB::select("
-            SELECT id, `order`, title, image, link, width, height, (STATUS = 1 AND NOW() BETWEEN IFNULL(start_date, NOW()) AND IFNULL(end_date, NOW())) AS really_status
-            FROM banner
-            WHERE id_website = $id_website
-            AND id_position = $id_position
-            ORDER BY `status` DESC, `order` ASC, id ASC
-        ");
-        $data['listItem'] = $listItem;
+        $data = [
+            'id_website' => $id_website,
+            'id_position' => $id_position,
+            'keyword' => $keyword,
+            'listItem' => $listItem,
+            'allPosition' => $allPosition,
+            'allSite' => $allSite
+        ];
         return view('admin.banner.banner_index', $data);
     }
-
-    public function update($id_banner = 0, $id_website = '', $id_position = '', Request $request) {
-
-        $data = [];
-        if ($id_banner > 0){
-            $data['oneItem'] = $oneItem = Banner::findOrFail($id_banner);
+    private function updateOrder(){
+        $data = $this->request->input();
+        foreach ($data as $id => $value){
+            Banner::where('id', '=', $id)->update(['order' => $value]);
         }
-        $data['type'] = $oneItem->type ?? 'default';
+        unset($data['updateOrder']);
+        return Redirect::route("getUrlBannerList", $data);
+    }
+    public function updateOrInsertBanner($id_banner = 0) {
+        if ($id_banner == 0){
+            $id_website = $this->request->get('id_website');
+            $id_position = $this->request->get('id_position');
+            $type = "default";
+        } else {
+            $oneItem = Banner::find($id_banner);
+            if (empty($oneItem))
+                return Redirect::route("getUrlBannerUpdate", [0]);
+            $id_website = $oneItem->id_website;
+            $id_position = $oneItem->id_position;
+            $type = $oneItem->type;
+        }
 
-        $data['allSite'] = $allSite = Banner_site::where('type', '=', 'website')->get();
-        $data['allPosition'] = $allPosition = Banner_site::where('type', '=', 'position')->get();
+        $allSite = Banner_site::where('type', '=', 'website')->get();
+        $allPosition = Banner_site::where('type', '=', 'position')->get();
 
-        $data['id_website'] = $id_website;
-        $data['id_position'] = $id_position;
+        $post_data = $_POST;
 
-        if (!empty($request->post())) {
-            $post_data = $request->post();
+        if (!empty($post_data)) {
             if (!isset($post_data['clickSubmit'])){
-                if (isset($post_data['type']))
-                    $data['type'] = $post_data['type'];
-                return view('admin.banner.banner_update', $data);
+                /*chuyển type*/
+                $type = $_POST['type'] ?? $type;
+            } else {
+                $post_data = $this->request->post();
+                $post_data['slug'] = toSlug($post_data['title']);
+                unset($post_data['clickSubmit'], $post_data['_token']);
+                Banner::updateOrInsert(['id' => $id_banner], $post_data);
+                return Redirect::route("getUrlBannerList", ["id_website" => $post_data['id_website'], 'id_position' => $post_data['id_position']]);
             }
-            $post_data['slug'] = toSlug($post_data['title']);
-            $post_data['status'] = isset($post_data['status']) ? 1 : 0;
-            unset($post_data['clickSubmit']);
-            Banner::updateOrInsert(['id' => $id_banner], $post_data);
-            return Redirect::to('/admin/banner/'.$post_data['id_website'].'/'.$post_data['id_position']);
         }
+        $data = [
+            'id_website' => $id_website,
+            'id_position' => $id_position,
+            'type' => $type,
+            'allSite' => $allSite,
+            'allPosition' => $allPosition,
+            'oneItem' => $oneItem ?? null
+        ];
         return view('admin.banner.banner_update', $data);
     }
-
     public function delete($id) {
         Banner::destroy($id);
+        return back();
+    }
+    public function duplicate($id) {
+        $banner = Banner::where('id', '=', $id)->get()->toArray();
+        if (empty($banner))
+            return back();
+
+        unset($banner[0]['id']);
+        foreach ($banner[0] as $k => $v){
+            $dataSave[$k] = $v;
+        }
+
+        Banner::updateOrInsert(['id' => 0], $dataSave);
         return back();
     }
 
@@ -118,7 +133,7 @@ class BannerController extends Controller
 
         $allSite = Banner_site::where($condition)
             ->paginate($limit);
-        $allSite->appends(Request::input());
+        $allSite->appends($this->request->input());
 
         $data = [
             'keyword' => $keySeach,
@@ -130,13 +145,13 @@ class BannerController extends Controller
     private function updateOrInsertSite($type, $id){
         if ($id > 0)
             $oneItem = Banner_site::findOrFail($id);
-        $post_data = Request::post();
+        $post_data = $this->request->post();
 
         if (!empty($post_data)) {
             $post_data['type'] = $type;
             $post_data['slug'] = toSlug($post_data['title']);
             Banner_site::updateOrInsert(['id' => $id], $post_data);
-            return Redirect::to(AdminUrl::getUrlBannerSite($type, null));
+            return Redirect::route("getUrlBannerSite", [$type, null]);
         }
         $data = [
             'oneItem' => $oneItem ?? null,
@@ -144,31 +159,8 @@ class BannerController extends Controller
         ];
         return view('admin.banner.site_update', $data);
     }
-
     public function deleteSite($id) {
         Banner_site::destroy($id);
         return back();
-    }
-
-    public function duplicate($id) {
-        $banner = Banner::where('id', '=', $id)->get()->toArray();
-        if (empty($banner))
-            return back();
-
-        unset($banner[0]['id']);
-        foreach ($banner[0] as $k => $v){
-            $dataSave[$k] = $v;
-        }
-
-        Banner::updateOrInsert(['id' => 0], $dataSave);
-        return back();
-    }
-    public function updateOrder(Request $input){
-        $data = $input->input('order') ?? die();
-        $backLink = $input->input('backLink') ?? die();
-        foreach ($data as $id => $value){
-            Banner::where('id', '=', $id)->update(['order' => $value]);
-        }
-        return Redirect::to($backLink);
     }
 }

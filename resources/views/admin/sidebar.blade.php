@@ -1,3 +1,6 @@
+@php
+use App\Helpers\AdminUrl;
+@endphp
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     <div class="c-sidebar-brand d-lg-down-none">
         <svg class="c-sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
@@ -16,9 +19,9 @@
                 Quản lý banner
             </a>
             <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="/admin/banner/site/website"><span class="c-sidebar-nav-icon"></span> Danh sách site</a></li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="/admin/banner/site/position"><span class="c-sidebar-nav-icon"></span> Danh sách vị trí</a></li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="/admin/banner"><span class="c-sidebar-nav-icon"></span> Danh sách banner</a></li>
+                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="{{AdminUrl::getUrlBannerSite('website')}}"><span class="c-sidebar-nav-icon"></span> Danh sách site</a></li>
+                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="{{AdminUrl::getUrlBannerSite('position')}}"><span class="c-sidebar-nav-icon"></span> Danh sách vị trí</a></li>
+                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{AdminUrl::getUrlBanner()}}"><span class="c-sidebar-nav-icon"></span> Danh sách banner</a></li>
             </ul>
         </li>
         @if(!empty($permission['user']))

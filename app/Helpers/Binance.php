@@ -108,6 +108,7 @@ class Binance{
                     sleep($this->timeInterval);
                 } else {
                     Telegram::sendMessage("Tìm được giá bán $this->baseAsset đẹp $this->priceNow");
+                    break;
                 }
             } else {
                 sleep($this->timeInterval);

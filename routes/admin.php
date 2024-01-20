@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth', 'checkPermission']], function () {
     Route::any('/site_setting/update','Site_SettingController@update');
 
     /*Banner*/
-    Route::get('banner','BannerController@index')->name("getUrlBannerList");
+    Route::any('banner','BannerController@index')->name("getUrlBannerList");
     Route::any('banner/{id?}','BannerController@updateOrInsertBanner')->where(['id' => '\d+'])
         ->name("getUrlBannerUpdate");
     Route::get('/banner/delete/{id}','BannerController@delete')->where(['id' => '\d+'])

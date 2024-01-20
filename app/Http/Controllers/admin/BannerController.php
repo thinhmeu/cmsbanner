@@ -49,10 +49,10 @@ class BannerController extends Controller
     }
     private function updateOrder(){
         $data = $this->request->input();
-        foreach ($data as $id => $value){
+        foreach ($data['order'] as $id => $value){
             Banner::where('id', '=', $id)->update(['order' => $value]);
         }
-        unset($data['updateOrder']);
+        unset($data['updateOrder'], $data['order']);
         return Redirect::route("getUrlBannerList", $data);
     }
     public function updateOrInsertBanner($id_banner = 0) {

@@ -46,11 +46,17 @@
                             <table class="table table-striped table-bordered datatable text-center">
                                 <thead>
                                 <tr>
-                                    <th class="w-5">ID</th>
-                                    <th class="w-10">Thứ tự</th>
-                                    <th class="text-left">Tiêu đề</th>
-                                    <th class="text-left">Link</th>
-                                    <th class="w-15">Thao tác</th>
+                                    <th style="width: 70px;">ID</th>
+                                    <th style="width: 70px">Thứ tự</th>
+                                    <th style="width: 250px;">Tiêu đề</th>
+                                    <th style="width: 300px;">Link</th>
+                                    @if(empty($id_website))
+                                        <th style="width: 160px;">Website</th>
+                                    @endif
+                                    @if(empty($id_position))
+                                        <th style="width: 160px;">Vị trí</th>
+                                    @endif
+                                    <th>Thao tác</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -58,7 +64,7 @@
                                     <tr>
                                         <td>{{$item->id}}</td>
                                         <td>
-                                            <input type="number" min="1" class="form-control form-control-sm" name="order[{{$item->id}}]" value="{{$item->order}}">
+                                            <input form="formUpdateOrder" type="number" min="1" class="form-control form-control-sm" name="order[{{$item->id}}]" value="{{$item->order}}">
                                         </td>
 
                                         <?php $reallyStatus = [
@@ -66,8 +72,14 @@
                                             '<span class="badge badge-success">On</span>',
                                         ]
                                         ?>
-                                        <td class="text-left">{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->recent_status]!!}</td>
-                                        <td class="text-left">{{$item->link ?? ''}}</td>
+                                        <td>{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->recent_status]!!}</td>
+                                        <td>{{$item->link ?? ''}}</td>
+                                        @if(empty($id_website))
+                                            <td>{{$item->website}}</td>
+                                        @endif
+                                        @if(empty($id_position))
+                                            <td>{{$item->position}}</td>
+                                        @endif
                                         <td>
                                             <div class="d-flex flex-wrap gap-3">
                                                 <a class="btn btn-info" href="{{route("getUrlBannerUpdate", [$item->id])}}">
@@ -86,7 +98,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <form action="" id="formUpdateOrder">
+                        <form action="" method="post" id="formUpdateOrder">
                             <button name="updateOrder" value="1" class="btn btn-sm btn-success">Update order</button>
                         </form>
                     </div>

@@ -18,7 +18,9 @@ class Banner extends Model
     }
     public static function getListBanner($id_website = 0, $id_position = 0, $keyword = ''){
         $queryRecentStatus = DB::raw("`status` && NOW() BETWEEN COALESCE(start_date, NOW()) AND COALESCE(end_date, NOW()) as recent_status");
-        $tmp = self::select("id", "order", "title", "width", "height", "link", $queryRecentStatus)
+        $queryWebsite = DB::raw("(SELECT title FROM banner_site WHERE `type` = 'website' AND banner_site.id = id_website) AS website");
+        $queryPosition = DB::raw("(SELECT title FROM banner_site WHERE `type` = 'position' AND banner_site.id = id_position) AS `position`");
+        $tmp = self::select("id", "order", "title", "width", "height", "link", $queryRecentStatus, $queryWebsite, $queryPosition)
         ->orderBy("recent_status", "desc")
         ->orderBy('order', 'asc')
         ->orderBy('id', 'desc');

@@ -1,13 +1,13 @@
 <?php
 namespace App\Helpers;
+use App\Helpers\Telegram;
 use Binance\API;
 use Illuminate\Support\Facades\Cache;
 use Mockery\Exception;
-use App\Helpers\Telegram;
 
 class Binance{
-    protected $api, $symbol, $invest, $buyPrice, $sellPrice, $tryToSell;
-    protected $priceNow, $baseAsset, $quoteAsset, $orderId, $orderFilled, $order;
+    protected $api, $symbol, $invest, $buyPrice, $sellPrice;
+    protected $priceNow, $baseAsset, $quoteAsset, $orderId, $orderFilled;
     protected $timeInterval = 3;
     public function __construct(API $binance, $symbol, $invest, $buyPrice, $sellPrice){
         $this->api = $binance;
@@ -15,9 +15,8 @@ class Binance{
         $this->invest = $invest;
         $this->buyPrice = $buyPrice;
         $this->sellPrice = $sellPrice;
-        $this->tryToSell = false;
 
-        $info = $this->api->exchangeInfo()['symbols'][$this->symbol];
+        $info = $this->exchangeInfo()[$this->symbol];
         if ($info['isSpotTradingAllowed'] == false){
             throw new \Exception("Token $this->symbol không mở giao dịch SPOT");
         }
@@ -26,26 +25,41 @@ class Binance{
     }
     public function auto(){
         $this->findTheBestBuyPrice();
-        $this->tryBuy();
+        $this->buyNow();
         $this->checkOrder();
-        if ($this->orderFilled){
-            $this->findTheBestSellPrice();
-            $this->trySell();
-        }
+        $this->findTheBestSellPrice();
+        $this->sellNow();
+        $this->checkOrder();
     }
     public function buy(){
         $this->findTheBestBuyPrice();
-        $this->tryBuy();
-        if ($this->orderId)
-            $this->checkOrder();
+        $this->buyNow();
+        $this->checkOrder();
     }
     public function sell(){
         $this->findTheBestSellPrice();
-        $this->trySell();
-        if ($this->orderId)
-            $this->checkOrder();
+        $this->sellNow();
+        $this->checkOrder();
     }
 
+    private function findTheBestBuyPrice(){
+        $min = $this->buyPrice;
+        Telegram::sendMessage("Đang tìm giá mua $this->baseAsset <= $this->buyPrice");
+        do{
+            $this->priceNow = $this->api->price($this->symbol);
+            if ($this->priceNow < $this->buyPrice){
+                if ($this->priceNow <= $min){
+                    $min = $this->priceNow;
+                    sleep($this->timeInterval);
+                } else {
+                    Telegram::sendMessage("Tìm được giá phù hợp: ".rtrim($this->priceNow, '0'));
+                    break;
+                }
+            } else {
+                sleep($this->timeInterval);
+            }
+        } while (1);
+    }
     private function getQuantityToBuy(){
         $exchangeInfo = $this->exchangeInfo()[$this->symbol]['filters'][1];
         $stepSize = $exchangeInfo['stepSize'];
@@ -59,52 +73,33 @@ class Binance{
         $maxInvest = $maxQuantity*$this->priceNow;
         throw new \Exception("Tiền đầu tư trong khoảng $minInvest$ -> $maxInvest$");
     }
-    private function findTheBestBuyPrice(){
-        $min = $this->buyPrice;
-        $bought = false;
-        Telegram::sendMessage("Tìm giá mua $this->baseAsset đẹp $this->buyPrice");
-        do{
-            $this->priceNow = $this->api->price($this->symbol);
-            if ($this->priceNow < $this->buyPrice){
-                if ($this->priceNow <= $min){
-                    $min = $this->priceNow;
-                    sleep($this->timeInterval);
-                } else {
-                    $bought = true;
-                }
-            } else {
-                sleep($this->timeInterval);
-            }
-        } while (!$bought);
-        return true;
-    }
-    private function tryBuy(){
-        try {
-            $quantity = $this->getQuantityToBuy();
+    private function buyNow(){
+        $quantity = $this->getQuantityToBuy();
 
-            $order = $this->api->buy($this->symbol, $quantity, 0, "MARKET");
-            $this->orderId = $order['orderId'];
-            $this->order = $order;
-        } catch (\Exception $e){
-            return null;
-        }
+        $order = $this->api->buy($this->symbol, $quantity, 0, "MARKET");
+        Telegram::sendMessage("{$order['orderId']}: lên đơn mua $this->invest$ $this->baseAsset");
+        $this->orderId = $order['orderId'];
     }
+
     private function checkOrder(){
+        if (!$this->orderId)
+            return;
         do{
             $order = $this->api->orderStatus($this->symbol, $this->orderId);
             if ($order['status'] !== 'FILLED'){
                 sleep($this->timeInterval);
             } else {
-                $check = ["BUY" => "BOUGHT", "SELL" => "SOLD"][$order['side']];
-                Telegram::sendMessage("$check ".rtrim($order['origQty'], '0')." {$this->baseAsset}");
+                $check = ["BUY" => "Đã mua", "SELL" => "Đã bán"][$order['side']];
+                Telegram::sendMessage("$this->orderId: $check ".rtrim($order['origQty'], '0')." {$this->baseAsset}");
                 $this->orderId = false;
+                break;
             }
-        } while ($this->orderId != false);
+        } while (1);
     }
+
     private function findTheBestSellPrice(){
         $max = $this->sellPrice;
-        $sold = false;
-        Telegram::sendMessage("Tìm giá bán $this->baseAsset đẹp $this->sellPrice");
+        Telegram::sendMessage("Đang tìm giá bán $this->baseAsset >= $this->sellPrice");
         do{
             $this->priceNow = $this->api->price($this->symbol);
             if ($this->priceNow > $this->sellPrice){
@@ -112,13 +107,12 @@ class Binance{
                     $max = $this->priceNow;
                     sleep($this->timeInterval);
                 } else {
-                    $sold = true;
+                    Telegram::sendMessage("Tìm được giá bán $this->baseAsset đẹp $this->priceNow");
                 }
             } else {
                 sleep($this->timeInterval);
             }
-        } while (!$sold);
-        return true;
+        } while (1);
     }
     private function getQuantityToSell(){
         $totalBaseQuote = $this->api->balances()[$this->baseAsset]['available'];
@@ -132,11 +126,13 @@ class Binance{
         }
         throw new \Exception("Số lượng bán ra phải từ $min -> $max");
     }
-    private function trySell(){
+    private function sellNow(){
         $quantity = $this->getQuantityToSell();
         $order = $this->api->sell($this->symbol, $quantity, 0, "MARKET");
         $this->orderId = $order['orderId'];
+        Telegram::sendMessage("$this->orderId: Lên đơn bán $quantity $this->baseAsset");
     }
+
     private function exchangeInfo(){
         $keyCache = __FUNCTION__;
         $data = Cache::get($keyCache);
@@ -145,5 +141,9 @@ class Binance{
             Cache::put($keyCache, $data, 86400);
         }
         return $data;
+    }
+
+    public function __destruct (){
+        Telegram::sendMessage("auto đã dừng!");
     }
 }

@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 /*404*/
 Route::any('/404.html', 'RouterController@not_found');
 
-Route::get("telegram", "HomeController@telegram");
+Route::get("/", "HomeController@index");

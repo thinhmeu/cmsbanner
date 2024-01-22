@@ -81,6 +81,7 @@ class BannerController extends Controller
             } else {
                 $post_data = $this->request->post();
                 $post_data['slug'] = toSlug($post_data['title']);
+                $post_data['alt'] = $post_data['title'];
                 unset($post_data['clickSubmit'], $post_data['_token']);
                 Banner::updateOrInsert(['id' => $id_banner], $post_data);
                 return Redirect::route("getUrlBannerList", ["id_website" => $post_data['id_website'], 'id_position' => $post_data['id_position']]);

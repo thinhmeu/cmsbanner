@@ -10,57 +10,54 @@
                             <div class="card">
                                 <div class="card-header"><strong>{{!empty($oneItem) ? 'Chỉnh sửa' : 'Thêm mới'}} Banner</strong></div>
                                 <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-12 col-lg-6">
-                                            <div class="form-group">
-                                                <b>Tiêu đề Banner</b>
-                                                <input name="title" class="form-control" value="{{$oneItem->title ?? ''}}" required>
-                                            </div>
+                                    <div class="row align-items-center gap-y-3">
+                                        <div class="col-6 col-lg-2">
+                                            <span>Tiêu đề Banner</span>
+                                            <input name="title" class="form-control" value="{{$oneItem->title ?? ''}}" required>
                                         </div>
-                                        <div class="col-12 col-lg-6">
-                                            <div class="form-group">
-                                                <b>Kiểu banner:</b>
-                                                <select name="type" class="form-control" onchange="this.form.submit()">
-                                                    <option type="text" value="default" {{$type == 'default' ? 'selected' : ''}}>default</option>
-                                                    <option type="text" value="content" {{$type == 'content' ? 'selected' : ''}}>content</option>
-                                                </select>
-                                            </div>
+                                        <div class="col-6 col-lg-2">
+                                            <span>Kiểu banner:</span>
+                                            <select name="type" class="form-control" onchange="this.form.submit()">
+                                                <option type="text" value="default" {{$type == 'default' ? 'selected' : ''}}>default</option>
+                                                <option type="text" value="content" {{$type == 'content' ? 'selected' : ''}}>content</option>
+                                            </select>
                                         </div>
-                                        <div class="col-12 col-lg-6">
-                                            <div class="form-group">
-                                                <label>Website</label>
-                                                <select name="id_website" class="form-control" required>
-                                                    @foreach($allSite as $item)
-                                                        <option @if($id_website == $item->id) selected @endif
-                                                        value="{{$item->id}}">{{$item->title}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                        <div class="col-6 col-lg-3">
+                                            <span>Website</span>
+                                            <select name="id_website" class="form-control" required>
+                                                @foreach($allSite as $item)
+                                                    <option @if($id_website == $item->id) selected @endif
+                                                    value="{{$item->id}}">{{$item->title}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div class="col-12 col-lg-6">
-                                            <div class="form-group">
-                                                <label>Vị trí</label>
-                                                <select name="id_position" class="form-control" required>
+                                        <div class="col-6 col-lg-3">
+                                            <span>Vị trí</span>
+                                            <select name="id_position" class="form-control" required>
                                                 @foreach($allPosition as $item)
                                                     <option @if($id_position == $item->id) selected @endif
                                                     value="{{$item->id}}">{{$item->title}}</option>
                                                 @endforeach
-                                                </select>
-                                            </div>
+                                            </select>
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-12"></div>
+                                        <div class="col-3 col-lg-1">
                                             <span>STT</span>
                                             <input required type="number" class="form-control" min="1" name="order" value="{{ $oneItem->order ?? 1 }}">
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-6 col-lg-2">
                                             <span>Start date</span>
                                             <input type="datetime-local" class="form-control" name="start_date" value="{!! !empty($oneItem->start_date) ? date('Y-m-d\TH:i', strtotime($oneItem->start_date)) : ''!!}">
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-6 col-lg-2">
                                             <span>End date</span>
                                             <input type="datetime-local" class="form-control" name="end_date" value="{!! !empty($oneItem->end_date) ? date('Y-m-d\TH:i', strtotime($oneItem->end_date)) : ''!!}">
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-3 col-lg-1">
+                                            <span>Số lần hiển thị</span>
+                                            <input class="form-control" name="nums_of_show" type="number" min="0" max="99" value="{{$oneItem->nums_of_show ?? 1}}">
+                                        </div>
+                                        <div class="col-2 col-lg-1">
                                             <div>On/Off</div>
                                             <input type="checkbox" name="status" value="1" @if($oneItem->status ?? 1 != 0) checked @endif>
                                         </div>

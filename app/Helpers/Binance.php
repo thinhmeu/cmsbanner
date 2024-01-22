@@ -143,8 +143,4 @@ class Binance{
         }
         return $data;
     }
-
-    public function __destruct (){
-        Telegram::sendMessage("auto đã dừng!");
-    }
 }

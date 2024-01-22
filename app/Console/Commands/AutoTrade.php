@@ -60,7 +60,7 @@ class AutoTrade extends Command
                     $a->sell(); break;
             }
         } catch (\Exception $e){
-            Telegram::sendMessage($e->getMessage());
+            Telegram::sendMessage("Lỗi: ".$e->getMessage());
         }
         return 0;
     }

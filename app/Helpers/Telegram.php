@@ -7,7 +7,8 @@ class Telegram{
     public static function sendMessage($text = ''){
         if (!empty($text)){
             $token = env("TELEGRAM_BOT_TOKEN");
-            $chatId = env("TELEGRAM_CHAT_GROUP_ID");
+//            $chatId = env("TELEGRAM_CHAT_GROUP_ID");
+            $chatId = env("TELEGRAM_CHAT_ID");
 
             $client = new Client();
 

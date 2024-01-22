@@ -30,6 +30,6 @@ class Banner extends Model
             $tmp->where("id_website", $id_website);
         if ($id_position)
             $tmp->where("id_position", $id_position);
-        return $tmp->paginate(10);
+        return $tmp->paginate(100);
     }
 }

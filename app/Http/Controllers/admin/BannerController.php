@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner_numsofshow;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Banner;
@@ -24,6 +25,8 @@ class BannerController extends Controller
             return \redirect()->route("getUrlBannerUpdate", array_merge([0], $_GET));
         } elseif ($this->request->get('updateOrder')){
             return $this->updateOrder();
+        } elseif ($this->request->get('numsOfShow')){
+            return $this->updateNumsOfShow();
         } else {
             return $this->showListBanner();
         }
@@ -36,6 +39,11 @@ class BannerController extends Controller
         $allSite = Banner_site::getWebsiteWithCountPosition();
         $allPosition = Banner_site::getPositionWithCountBanner($id_website);
         $listItem = Banner::getListBanner($id_website, $id_position, $keyword);
+        if ($id_website && $id_position){
+            $nums_of_show = Banner_numsofshow::where("id_website", $id_website)
+                ->where("id_position", $id_position)
+                ->first()->nums_of_show ?? 1;
+        }
 
         $data = [
             'id_website' => $id_website,
@@ -43,7 +51,8 @@ class BannerController extends Controller
             'keyword' => $keyword,
             'listItem' => $listItem,
             'allPosition' => $allPosition,
-            'allSite' => $allSite
+            'allSite' => $allSite,
+            'nums_of_show' => $nums_of_show ?? null
         ];
         return view('admin.banner.banner_index', $data);
     }
@@ -54,6 +63,18 @@ class BannerController extends Controller
         }
         unset($data['updateOrder'], $data['order']);
         return Redirect::route("getUrlBannerList", $data);
+    }
+    private function updateNumsOfShow(){
+        $id_website = $this->request->get("id_website");
+        $id_position = $this->request->get("id_position");
+        $numsOfShow = $this->request->get("nums_of_show");
+        if ($id_website && $id_position){
+            Banner_numsofshow::updateOrInsert([
+                'id_website' => $id_website,
+                'id_position' => $id_position
+            ], ["nums_of_show" => $numsOfShow]);
+        }
+        return Redirect::to($this->request->fullUrlWithoutQuery(["numsOfShow", "nums_of_show"]));
     }
     public function updateOrInsertBanner($id_banner = 0) {
         if ($id_banner == 0){

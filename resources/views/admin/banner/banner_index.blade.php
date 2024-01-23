@@ -9,7 +9,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form class="row my-3 no-gutters gap-3">
+                        <form class="row my-3 no-gutters gap-3 align-items-end">
                             <div>
                                 <b>Chọn website</b>
                                 @if(!empty($allSite))
@@ -36,14 +36,23 @@
                                 <b>Tìm kiếm</b>
                                 <input class="form-control" type="text" name="keyword" value="{{$keyword}}">
                             </div>
-                            <button class="btn btn-sm btn-primary" type="submit">Lọc</button>
-                            <div class="col-12">
-                                <button name="addBanner" value="1" class="btn btn-primary btn-sm mr-3">Thêm mới</button>
+                            <div class="col-lg-1">
+                                <button class="btn btn-sm btn-primary" type="submit">Lọc</button>
+                            </div>
+                            @if(isset($nums_of_show))
+                                <div class="col-12 col-lg-5 d-flex gap-3">
+                                    <span>Số lần hiển thị</span>
+                                    <input type="number" name="nums_of_show" value="{{$nums_of_show}}">
+                                    <button class="btn btn-primary btn-sm" name="numsOfShow" value="1">Cập nhật số lần hiển thị</button>
+                                </div>
+                            @endif
+                            <div class="col-12 col-lg-5">
+                                <button name="addBanner" value="1" class="ml-auto btn btn-primary btn-sm d-block">Thêm mới</button>
                             </div>
                         </form>
 
                         <div class="overflow-auto">
-                            <table class="table table-striped table-bordered datatable text-center">
+                            <table class="table table-sm table-striped table-bordered text-center">
                                 <thead>
                                 <tr>
                                     <th style="width: 70px;">ID</th>

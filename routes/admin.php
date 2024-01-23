@@ -49,17 +49,17 @@ Route::group(['middleware' => ['auth', 'checkPermission']], function () {
     Route::any('/site_setting/update','Site_SettingController@update');
 
     /*Banner*/
-    Route::any('banner','BannerController@index')->name("getUrlBannerList");
+    Route::any('banner','BannerController@index')->name("banner.list");
     Route::any('banner/{id?}','BannerController@updateOrInsertBanner')->where(['id' => '\d+'])
-        ->name("getUrlBannerUpdate");
-    Route::get('/banner/delete/{id}','BannerController@delete')->where(['id' => '\d+'])
-        ->name("getUrlBannerDelete");
+        ->name("banner.insert");
+    Route::get('/banner/changeStatus/{id}','BannerController@changeStatus')->where(['id' => '\d+'])
+        ->name("banner.change.status");
     Route::get('/banner/duplicate/{id}','BannerController@duplicate')->where(['id' => '[0-9]+'])
-        ->name("getUrlBannerDuplicate");
+        ->name("banner.duplicate");
 
     Route::get('banner/{type}/{id?}','BannerController@site')
         ->where(['type' => 'website|position', 'id' => '\d+'])
-        ->name("getUrlBannerSite");
+        ->name("banner.site");
     Route::get('/banner/deleteSite/{id}','BannerController@deleteSite')
         ->where(['id' => '[0-9]+'])->name("getUrlBannerSiteDelete");
 });

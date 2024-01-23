@@ -16,9 +16,9 @@
                 Quản lý banner
             </a>
             <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="{{route("getUrlBannerSite", ['website'])}}"><span class="c-sidebar-nav-icon"></span> Danh sách site</a></li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="{{route("getUrlBannerSite", ['position'])}}"><span class="c-sidebar-nav-icon"></span> Danh sách vị trí</a></li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route("getUrlBannerList")}}"><span class="c-sidebar-nav-icon"></span> Danh sách banner</a></li>
+                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="{{route("banner.site", ['website'])}}"><span class="c-sidebar-nav-icon"></span> Danh sách site</a></li>
+                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="{{route("banner.site", ['position'])}}"><span class="c-sidebar-nav-icon"></span> Danh sách vị trí</a></li>
+                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route("banner.list")}}"><span class="c-sidebar-nav-icon"></span> Danh sách banner</a></li>
             </ul>
         </li>
         @if(!empty($permission['user']))

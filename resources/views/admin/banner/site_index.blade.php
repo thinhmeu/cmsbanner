@@ -29,7 +29,7 @@
                                     <td class="text-center">{{$item->id}}</td>
                                     <td>{{$item->title}}</td>
                                     <td class="text-center">
-                                        <a class="btn btn-info" href="{{route("getUrlBannerSite", [$type, $item->id])}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg></a>
+                                        <a class="btn btn-info" href="{{route("banner.site", [$type, $item->id])}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg></a>
                                         <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="{{route("getUrlBannerSiteDelete", [$item->id])}}"><svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg></a>
                                     </td>
                                 </tr>

@@ -58,6 +58,7 @@
                                     <th style="width: 70px;">ID</th>
                                     <th style="width: 70px">Thứ tự</th>
                                     <th style="width: 250px;">Tiêu đề</th>
+                                    <th style="width: 60px;">Status</th>
                                     <th style="width: 300px;">Link</th>
                                     @if(empty($id_website))
                                         <th style="width: 160px;">Website</th>
@@ -75,13 +76,17 @@
                                         <td>
                                             <input form="formUpdateOrder" type="number" min="1" class="form-control form-control-sm" name="order[{{$item->id}}]" value="{{$item->order}}">
                                         </td>
-
+                                        <td>{{$item->title}} {{$item->width.'*'.$item->height}}</td>
                                         <?php $reallyStatus = [
-                                            '<span class="badge badge-danger">Off</span>',
-                                            '<span class="badge badge-success">On</span>',
+                                        '<span class="badge badge-danger">Off</span>',
+                                        '<span class="badge badge-success">On</span>',
                                         ]
                                         ?>
-                                        <td>{{$item->title}} {{$item->width.'*'.$item->height}} {!!$reallyStatus[$item->recent_status]!!}</td>
+                                        <td>
+                                            <a href="{{route('banner.change.status', [$item->id, 'status' => $item->recent_status])}}">{!!$reallyStatus[$item->recent_status]!!}</a>
+                                        </td>
+
+
                                         <td>{{$item->link ?? ''}}</td>
                                         @if(empty($id_website))
                                             <td>{{$item->website}}</td>
@@ -91,13 +96,10 @@
                                         @endif
                                         <td>
                                             <div class="d-flex flex-wrap gap-3">
-                                                <a class="btn btn-info" href="{{route("getUrlBannerUpdate", [$item->id])}}">
+                                                <a class="btn btn-info" href="{{route("banner.insert", [$item->id])}}">
                                                     <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-pencil"></use></svg>
                                                 </a>
-                                                <a class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')" href="{{route("getUrlBannerDelete", [$item->id])}}">
-                                                    <svg class="c-icon"><use xlink:href="/admin/images/icon-svg/free.svg#cil-trash"></use></svg>
-                                                </a>
-                                                <a class="btn btn-info" href="{{route("getUrlBannerDuplicate", [$item->id])}}">
+                                                <a class="btn btn-info" href="{{route("banner.duplicate", [$item->id])}}">
                                                     <img loading="lazy" src="/admin/icons/svg/content_copy.svg" alt="" width="23" height="23" style="filter: invert(1)">
                                                 </a>
                                             </div>

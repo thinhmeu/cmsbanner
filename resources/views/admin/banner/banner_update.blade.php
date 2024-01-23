@@ -53,10 +53,6 @@
                                             <span>End date</span>
                                             <input type="datetime-local" class="form-control" name="end_date" value="{!! !empty($oneItem->end_date) ? date('Y-m-d\TH:i', strtotime($oneItem->end_date)) : ''!!}">
                                         </div>
-                                        <div class="col-3 col-lg-1">
-                                            <span>Số lần hiển thị</span>
-                                            <input class="form-control" name="nums_of_show" type="number" min="0" max="99" value="{{$oneItem->nums_of_show ?? 1}}">
-                                        </div>
                                         <div class="col-2 col-lg-1">
                                             <div>On/Off</div>
                                             <input type="checkbox" name="status" value="1" @if($oneItem->status ?? 1 != 0) checked @endif>

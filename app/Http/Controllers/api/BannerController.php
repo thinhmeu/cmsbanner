@@ -11,12 +11,19 @@ use Illuminate\Support\Facades\Http;
 class BannerController extends ApiController
 {
     public function index($siteName){
-        $data = DB::select("SELECT link, target, rel, image, alt, width, height, banner.type, content, nums_of_show, (SELECT banner_site.`slug` FROM banner_site WHERE `type` = 'position' AND id = id_position) AS vitri
-FROM banner JOIN banner_site ON id_website = banner_site.id
-WHERE banner_site.`slug` = '$siteName' AND `status` = 1 AND NOW() BETWEEN IFNULL(start_date,'1900-01-01') AND IFNULL(end_date,NOW()) ORDER BY banner.`order`");
+        $queryVitri = DB::raw("(SELECT banner_site.`slug` FROM banner_site WHERE `type` = 'position' AND id = id_position) AS vitri");
+        $queryNumsOfShow = DB::raw("(COALESCE((SELECT nums_of_show FROM banner_numsofshow JOIN banner AS b ON b.`id_website` = banner_numsofshow.`id_website` AND b.`id_position` = banner_numsofshow.`id_position` WHERE b.id_website = banner.`id_website` AND b.id_position = banner.`id_position` LIMIT 1), 1)) AS nums_of_show");
+        DB::enableQueryLog();
+        $data = Banner::select("link", "target", "rel", "image", "alt", "width", "height", "banner.type", "content", $queryVitri, $queryNumsOfShow)
+            ->join("banner_site", "id_website", "=", "banner_site.id")
+            ->where("banner_site.slug", $siteName)
+            ->where("status", 1)
+            ->whereBetween(DB::raw("NOW()"), [DB::raw("COALESCE(start_date, NOW())"), DB::raw("COALESCE(end_date, NOW())")])
+            ->orderBy("order", "asc")->get()->toArray();
+
         $tmp = [];
         foreach ($data as $item){
-            $tmp[$item->vitri][] = $item;
+            $tmp[$item['vitri']][] = $item;
         }
         ksort($tmp);
         $tmp = json_encode($tmp);

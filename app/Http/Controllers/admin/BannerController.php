@@ -22,7 +22,8 @@ class BannerController extends Controller
     /*banner*/
     public function index() {
         if ($this->request->get('addBanner')){
-            return \redirect()->route("banner.insert", array_merge([0], $_GET));
+            $param = [0, 'id_website' => $_GET['id_website'], 'id_position' => $_GET['id_position']];
+            return Redirect::route("banner.insert", $param);
         } elseif ($this->request->get('updateOrder')){
             return $this->updateOrder();
         } elseif ($this->request->get('numsOfShow')){

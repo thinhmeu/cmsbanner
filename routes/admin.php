@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth', 'checkPermission']], function () {
 
     /*Banner*/
     Route::any('banner','BannerController@index')->name("banner.list");
-    Route::any('banner/{id?}','BannerController@updateOrInsertBanner')->where(['id' => '\d+'])
+    Route::any('banner/{id}','BannerController@updateOrInsertBanner')->where(['id' => '\d+'])
         ->name("banner.insert");
     Route::get('/banner/changeStatus/{id}','BannerController@changeStatus')->where(['id' => '\d+'])
         ->name("banner.change.status");

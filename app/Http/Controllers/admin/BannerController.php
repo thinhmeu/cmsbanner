@@ -35,10 +35,11 @@ class BannerController extends Controller
         $id_website = $this->request->get('id_website');
         $id_position = $this->request->get('id_position');
         $keyword = $this->request->get('keyword');
+        $filerColumn = $this->request->get("filerColumn");
 
         $allSite = Banner_site::getWebsiteWithCountPosition();
         $allPosition = Banner_site::getPositionWithCountBanner($id_website);
-        $listItem = Banner::getListBanner($id_website, $id_position, $keyword);
+        $listItem = Banner::getListBanner($id_website, $id_position, $filerColumn, $keyword)->appends($_GET);
         if ($id_website && $id_position){
             $nums_of_show = Banner_numsofshow::where("id_website", $id_website)
                 ->where("id_position", $id_position)
@@ -49,6 +50,7 @@ class BannerController extends Controller
             'id_website' => $id_website,
             'id_position' => $id_position,
             'keyword' => $keyword,
+            'filerColumn' => $filerColumn,
             'listItem' => $listItem,
             'allPosition' => $allPosition,
             'allSite' => $allSite,

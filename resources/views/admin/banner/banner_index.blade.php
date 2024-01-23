@@ -36,6 +36,13 @@
                                 <b>Tìm kiếm</b>
                                 <input class="form-control" type="text" name="keyword" value="{{$keyword}}">
                             </div>
+                            <div>
+                                <b>Tìm với</b>
+                                <select name="filerColumn" class="form-control">
+                                    <option value="title" @if($filerColumn == 'title') selected @endif>Tiêu đề</option>
+                                    <option value="link" @if($filerColumn == 'link') selected @endif>Link</option>
+                                </select>
+                            </div>
                             <div class="col-lg-1">
                                 <button class="btn btn-sm btn-primary" type="submit">Lọc</button>
                             </div>

@@ -8,7 +8,7 @@ use Mockery\Exception;
 class Binance{
     protected $api, $symbol, $invest, $buyPrice, $sellPrice;
     protected $priceNow, $baseAsset, $quoteAsset, $orderId, $orderFilled;
-    protected $timeInterval = 3;
+    protected $timeInterval = 5;
     public function __construct(API $binance, $symbol, $invest, $buyPrice, $sellPrice){
         $this->api = $binance;
         $this->symbol = $symbol;
@@ -24,12 +24,8 @@ class Binance{
         $this->quoteAsset = $info['quoteAsset'];
     }
     public function auto(){
-        $this->findTheBestBuyPrice();
-        $this->buyNow();
-        $this->checkOrder();
-        $this->findTheBestSellPrice();
-        $this->sellNow();
-        $this->checkOrder();
+        $this->buy();
+        $this->sell();
     }
     public function buy(){
         $this->findTheBestBuyPrice();

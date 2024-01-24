@@ -5,6 +5,8 @@ use GuzzleHttp\Client;
 
 class Telegram{
     public static function sendMessage($text = ''){
+        dump($text);
+        return ;
         if (!empty($text)){
             $token = env("TELEGRAM_BOT_TOKEN");
 //            $chatId = env("TELEGRAM_CHAT_GROUP_ID");

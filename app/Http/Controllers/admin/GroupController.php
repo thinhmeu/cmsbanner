@@ -8,11 +8,6 @@ use App\Models\Group;
 
 class GroupController extends Controller
 {
-    public function __construct()
-    {
-
-    }
-
     public function index() {
         $data['listItem'] = Group::all();
         return view('admin.group.index', $data);

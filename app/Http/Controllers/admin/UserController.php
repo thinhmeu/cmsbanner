@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function index() {
         $keyword = $_GET['keyword'] ?? '';
-        $data['listItem'] = User::where('username', 'like', "%$keyword%")->paginate(2);
+        $data['listItem'] = User::where('username', 'like', "%$keyword%")->paginate(10);
         $data['listItem']->appends($_GET);
         return view('admin.user.index', $data);
     }

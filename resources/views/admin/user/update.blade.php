@@ -31,20 +31,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>Tên tác giả</label>
-                                                <input class="form-control" name="author" value="{{$oneItem->author ?? ''}}" type="text" placeholder="Tên tác giả">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>Url tác giả</label>
-                                                <input class="form-control" name="slug_author" value="{{$oneItem->slug_author ?? ''}}" type="text" placeholder="Url tác giả">
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

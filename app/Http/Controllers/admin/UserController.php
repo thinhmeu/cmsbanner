@@ -12,7 +12,9 @@ use Response;
 class UserController extends Controller
 {
     public function index() {
-        $data['listItem'] = User::all();
+        $keyword = $_GET['keyword'] ?? '';
+        $data['listItem'] = User::where('username', 'like', "%$keyword%")->paginate(2);
+        $data['listItem']->appends($_GET);
         return view('admin.user.index', $data);
     }
 

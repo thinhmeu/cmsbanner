@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Banner extends Model
@@ -28,6 +29,10 @@ class Banner extends Model
             $tmp->where($filerColumn, "like", "%$keyword%");
         if ($id_website)
             $tmp->where("id_website", $id_website);
+        if (!ADMIN){
+            $listIdSite = User_site::getListIdSiteFromUserId(Auth::user()->id);
+            $tmp->whereIn('id_website', $listIdSite);
+        }
         if ($id_position)
             $tmp->where("id_position", $id_position);
         return $tmp->paginate(15);

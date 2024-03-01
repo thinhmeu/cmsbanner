@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -23,8 +24,13 @@ class Banner_site extends Model
         if (empty($data)){
             $queryGetCount = DB::raw("(SELECT COUNT(DISTINCT id_position) FROM banner WHERE `status` = 1 AND NOW() BETWEEN COALESCE(start_date, NOW()) AND COALESCE(end_date, NOW()) AND id_website = banner_site.id) AS count_position");
             $data = self::select("id", "title", $queryGetCount)
-                ->where("type", "website")
-                ->orderBy('title', 'asc')
+                ->where("type", "website");
+            if (!ADMIN){
+                $listIdSite = User_site::getListIdSiteFromUserId(Auth::user()->id);
+                $data->whereIn("id", $listIdSite);
+            }
+
+            $data = $data->orderBy('title', 'asc')
                 ->get();
             Cache::put($keyCache, $data, 5);
         }

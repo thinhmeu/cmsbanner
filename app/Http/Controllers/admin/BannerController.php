@@ -3,6 +3,9 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner_numsofshow;
+use App\Models\User;
+use App\Models\User_site;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Banner;
@@ -12,7 +15,7 @@ use Illuminate\Http\Request;
 
 class BannerController extends Controller
 {
-    public $request;
+    public $request, $group;
     public function __construct(Request $request)
     {
         parent::__construct();
@@ -37,6 +40,10 @@ class BannerController extends Controller
         $id_position = $this->request->get('id_position');
         $keyword = $this->request->get('keyword');
         $filerColumn = $this->request->get("filerColumn");
+
+        $checkPermission = User_site::checkPermission(Auth::id(), $id_website);
+        if (!$checkPermission)
+            return Redirect::route("banner.list");
 
         $allSite = Banner_site::getWebsiteWithCountPosition();
         $allPosition = Banner_site::getPositionWithCountBanner($id_website);
@@ -71,6 +78,11 @@ class BannerController extends Controller
         $id_website = $this->request->get("id_website");
         $id_position = $this->request->get("id_position");
         $numsOfShow = $this->request->get("nums_of_show");
+
+        $checkPermission = User_site::checkPermission(Auth::user()->id, $id_website);
+        if (!$checkPermission)
+            return Redirect::route("banner.list");
+
         if ($id_website && $id_position){
             Banner_numsofshow::updateOrInsert([
                 'id_website' => $id_website,

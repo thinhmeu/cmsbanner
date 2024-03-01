@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminProvider extends ServiceProvider
 {
@@ -14,8 +13,6 @@ class AdminProvider extends ServiceProvider
      */
     public function register()
     {
-        LengthAwarePaginator::$defaultView = "pagination::bootstrap-4";
-//        LengthAwarePaginator::$defaultView = "admin.block.pagination";
     }
 
     /**
@@ -25,9 +22,5 @@ class AdminProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer(
-            ['admin.sidebar'],
-            'App\Http\ViewComposers\Admin\SidebarComposer'
-        );
     }
 }

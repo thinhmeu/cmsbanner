@@ -53,6 +53,14 @@
                                             <option {{isset($oneItem->status) && $oneItem->status == 0 ? 'selected' : ''}} value="0">Không hoạt động</option>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Điều hành banner site</label>
+                                        <select name="user_site[]" multiple class="form-control">
+                                            @foreach($listSite as $i)
+                                                <option value="{{$i->id}}" @if(in_array($i->id, $userSite)) selected @endif>{{$i->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <div class="form-group float-right">
                                         <button type="submit" class="btn btn-primary">Lưu trữ</button>
                                     </div>

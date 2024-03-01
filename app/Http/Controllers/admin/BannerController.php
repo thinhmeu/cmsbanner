@@ -110,6 +110,10 @@ class BannerController extends Controller
             $id_website = $oneItem->id_website;
             $id_position = $oneItem->id_position;
             $type = $oneItem->type;
+
+            $checkPermission = User_site::checkPermission(Auth::id(), $id_website);
+            if (!$checkPermission)
+                return Redirect::route("banner.list");
         }
 
         $allSite = Banner_site::getWebsiteWithCountPosition();

@@ -92,6 +92,7 @@ function getListPermission() {
         'user' => 'Thành viên',
         'group' => 'Nhóm quyền',
         'banner' => 'Banner',
+        'banner_site' => 'Banner Site',
         'site_setting' => 'Cài đặt chung',
         'redirect' => 'Cấu hình Redirect',
         'menu' => 'Cấu hình Menu',

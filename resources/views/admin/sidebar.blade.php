@@ -8,6 +8,7 @@
         </svg>
     </div>
     <ul class="c-sidebar-nav ps ps--active-y">
+        @if(!empty($permission['banner']))
         <li class="c-sidebar-nav-item c-sidebar-nav-dropdown @if(getCurrentController() == 'banner') c-show @endif">
             <a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
                 <svg class="c-sidebar-nav-icon">
@@ -16,11 +17,14 @@
                 Quản lý banner
             </a>
             <ul class="c-sidebar-nav-dropdown-items">
+                @if(!empty($permission_site))
                 <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="{{route("banner.site", ['website'])}}"><span class="c-sidebar-nav-icon"></span> Danh sách site</a></li>
                 <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link @if(!empty($_GET['status'])) c-active @endif" href="{{route("banner.site", ['position'])}}"><span class="c-sidebar-nav-icon"></span> Danh sách vị trí</a></li>
+                @endif
                 <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{route("banner.list")}}"><span class="c-sidebar-nav-icon"></span> Danh sách banner</a></li>
             </ul>
         </li>
+        @endif
         @if(!empty($permission['user']))
         <li class="c-sidebar-nav-item c-sidebar-nav-dropdown">
             <a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">

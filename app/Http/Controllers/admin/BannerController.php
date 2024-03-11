@@ -41,13 +41,19 @@ class BannerController extends Controller
         $keyword = $this->request->get('keyword');
         $filerColumn = $this->request->get("filerColumn");
 
-        $checkPermission = User_site::checkPermission(Auth::id(), $id_website);
-        if (!$checkPermission)
-            return Redirect::route("banner.list");
+        $user_id = Auth::id();
+        User_site::checkPermission($user_id, $id_website);
 
-        $allSite = Banner_site::getWebsiteWithCountPosition();
-        $allPosition = Banner_site::getPositionWithCountBanner($id_website);
-        $listItem = Banner::getListBanner($id_website, $id_position, $filerColumn, $keyword)->appends($_GET);
+        $listIdSite = User_site::getListIdSiteFromUserId($user_id);
+        $allSite = Banner_site::getWebsiteWithCountPosition($listIdSite);
+        if (empty($id_website)){
+            $allPosition = Banner_site::getPositionWithCountBanner($listIdSite);
+            $listItem = Banner::getListBanner($listIdSite, $id_position, $filerColumn, $keyword)->appends($_GET);
+        } else {
+            $allPosition = Banner_site::getPositionWithCountBanner($id_website);
+            $listItem = Banner::getListBanner($id_website, $id_position, $filerColumn, $keyword)->appends($_GET);
+        }
+
         if ($id_website && $id_position){
             $nums_of_show = Banner_numsofshow::where("id_website", $id_website)
                 ->where("id_position", $id_position)
@@ -79,9 +85,7 @@ class BannerController extends Controller
         $id_position = $this->request->get("id_position");
         $numsOfShow = $this->request->get("nums_of_show");
 
-        $checkPermission = User_site::checkPermission(Auth::user()->id, $id_website);
-        if (!$checkPermission)
-            return Redirect::route("banner.list");
+        User_site::checkPermission(Auth::user()->id, $id_website);
 
         if ($id_website && $id_position){
             Banner_numsofshow::updateOrInsert([
@@ -110,14 +114,15 @@ class BannerController extends Controller
             $id_website = $oneItem->id_website;
             $id_position = $oneItem->id_position;
             $type = $oneItem->type;
-
-            $checkPermission = User_site::checkPermission(Auth::id(), $id_website);
-            if (!$checkPermission)
-                return Redirect::route("banner.list");
         }
+        $user_id = Auth::id();
+        $checkPermission = User_site::checkPermission($user_id, $id_website);
+        if ($checkPermission)
+            return $checkPermission;
 
-        $allSite = Banner_site::getWebsiteWithCountPosition();
-        $allPosition = Banner_site::getPositionWithCountBanner();
+        $listIdSite = User_site::getListIdSiteFromUserId($user_id);
+        $allSite = Banner_site::getWebsiteWithCountPosition($listIdSite);
+        $allPosition = Banner_site::getPositionWithCountBanner($listIdSite);
 
         $post_data = $_POST;
 

@@ -18,30 +18,30 @@ class Banner_site extends Model
 
         $this->table = 'banner_site';
     }
-    public static function getWebsiteWithCountPosition(){
-        $keyCache = __FUNCTION__;
+    public static function getWebsiteWithCountPosition($listId = null){
+        $listId = (array) $listId;
+        $keyCache = __FUNCTION__.json_encode($listId);
         $data = Cache::get($keyCache);
         if (empty($data)){
             $queryGetCount = DB::raw("(SELECT COUNT(DISTINCT id_position) FROM banner WHERE `status` = 1 AND NOW() BETWEEN COALESCE(start_date, NOW()) AND COALESCE(end_date, NOW()) AND id_website = banner_site.id) AS count_position");
             $data = self::select("id", "title", $queryGetCount)
                 ->where("type", "website");
-            if (!ADMIN){
-                $listIdSite = User_site::getListIdSiteFromUserId(Auth::user()->id);
-                $data->whereIn("id", $listIdSite);
+            if ($listId){
+                $data->whereIn("id", $listId);
             }
-
             $data = $data->orderBy('title', 'asc')
                 ->get();
             Cache::put($keyCache, $data, 5);
         }
         return $data;
     }
-    public static function getPositionWithCountBanner($id_website = 0){
-        $keyCache = __FUNCTION__.$id_website;
+    public static function getPositionWithCountBanner($id_website = null){
+        $id_website = (array) $id_website;
+        $keyCache = __FUNCTION__.json_encode($id_website);
         $data = Cache::get($keyCache);
         if (empty($data)){
             if ($id_website){
-                $queryGetCount = DB::raw("(SELECT COUNT(id) FROM banner WHERE `status` = 1 AND NOW() BETWEEN COALESCE(start_date, NOW()) AND COALESCE(end_date, NOW()) AND id_position = banner_site.id AND id_website = $id_website) AS count_banner");
+                $queryGetCount = DB::raw("(SELECT COUNT(id) FROM banner WHERE `status` = 1 AND NOW() BETWEEN COALESCE(start_date, NOW()) AND COALESCE(end_date, NOW()) AND id_position = banner_site.id AND id_website in (".implode(',', $id_website).")) AS count_banner");
             } else {
                 $queryGetCount = DB::raw("(SELECT COUNT(id) FROM banner WHERE `status` = 1 AND NOW() BETWEEN COALESCE(start_date, NOW()) AND COALESCE(end_date, NOW()) AND id_position = banner_site.id) AS count_banner");
             }
